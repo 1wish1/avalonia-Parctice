@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="AppoinmentScheduler.Views.SplashScreenView"
+        x:DataType="vm:SplashScreenViewModel"
+        SystemDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        Topmost="True"
+        Title="SplashScreenView">
+  <Border BorderBrush="Black" BorderThickness="2">
+    <Grid RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+      <Label Grid.Row="0"
+             Grid.Column="0"
+             Grid.ColumnSpan="2"
+             FontSize="18"
+             Background="AliceBlue"
+             Foreground="Black"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             HorizontalContentAlignment="Center"
+             VerticalContentAlignment="Center">
+        Launching Application...
+      </Label>
+      <Label Grid.Row="1"
+             Grid.Column="0"
+             DockPanel.Dock="Bottom"
+             Content="{Binding StartupMessage}"
+             FontSize="12"
+             Background="LightYellow"
+             Foreground="Black"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             HorizontalContentAlignment="Center"
+             VerticalContentAlignment="Center" />
+      <Button Grid.Row="1" Grid.Column="1" DockPanel.Dock="Bottom" Command="{Binding Cancel}">
+        Cancel
+      </Button>
+    </Grid>
+  </Border>
+
+      
+ 
+</Window>
