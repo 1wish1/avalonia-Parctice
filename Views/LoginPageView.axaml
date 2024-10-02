@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AppoinmentScheduler.Views.LoginPageView">
+             
   <ScrollViewer> 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid RowDefinitions="*, *" ColumnDefinitions="*, *" ShowGridLines="True"> 
@@ -12,6 +13,7 @@
           <Border CornerRadius="20" Background="Red" Width="400" Height="400" >
             <Canvas Background="Transparent" Width="400" Height="400">
               <TextBlock  Canvas.Top="10">asd</TextBlock>
+              
             </Canvas>
           </Border>
           </StackPanel>

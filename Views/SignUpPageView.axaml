@@ -1,0 +1,24 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:SignUpPageViewModel"
+             x:Class="AppoinmentScheduler.Views.SignUpPageView">
+  <StackPanel>
+
+      <TextBlock Text="Sign Up"/>
+      <Label Name="UserNameLabel" Content="User name" />
+      <TextBox Name="UserNameTextBox" Text="{Binding Username, Mode=TwoWay}" />
+
+      <Label Name="EmailLabel" Content="Email" />
+      <TextBox Name="EmailTextBox" Text="{Binding Email, Mode=TwoWay}"/>
+
+      <Label Name="PasswordLabel" Content="Password"/>
+      <TextBox Name="PasswordTextBox"  Text="{Binding Password, Mode=TwoWay}"/>
+      
+      <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
+      
+  </StackPanel>
+</UserControl>
