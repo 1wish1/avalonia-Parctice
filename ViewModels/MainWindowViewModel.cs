@@ -30,7 +30,7 @@ namespace AppoinmentScheduler.ViewModels
         partial void OnSelectedListItemChanged(ListItemTemplate? value)
         {
             if (value is null) return;
-
+            
             // Use the service provider to create an instance of the ViewModel
             var instance = _serviceProvider.GetRequiredService(value.ModelType) as ViewModelBase;
             if (instance is null) return;
