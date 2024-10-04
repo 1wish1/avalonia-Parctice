@@ -19,6 +19,7 @@
       <TextBox Name="PasswordTextBox"  Text="{Binding Password, Mode=TwoWay}"/>
       
       <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
-      
+
+      <TextBlock Text="{Binding Error}" Foreground="Red"/>      
   </StackPanel>
 </UserControl>

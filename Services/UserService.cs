@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Data;
 using Models;
+using System;
+using System.Linq;
 
 namespace AppoinmentScheduler.Services
 {
@@ -20,6 +22,17 @@ namespace AppoinmentScheduler.Services
             _context.SaveChanges();
         }
 
-       
+         public string getUserName()
+        {
+            // Fetch the user based on the provided username
+            var user = _context.Users
+                .FromSqlRaw("SELECT * FROM Users WHERE id = 2004")
+                .FirstOrDefault();
+
+            // Check if the user was found and return the username, or return null if not found
+            return user?.user_name; // Using null-conditional operator
+        }
+
+        
     }
 }
