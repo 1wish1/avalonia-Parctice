@@ -50,6 +50,9 @@ namespace AppoinmentScheduler.ViewModels
             new ListItemTemplate(typeof(LoginPageViewModel), "ArrowRightRegular"),
             new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular"),
         };
+        public void SetCurrentPage(ViewModelBase viewModelBase){
+            CurrentPage = viewModelBase;
+        }
     }
 
     public class ListItemTemplate
@@ -66,4 +69,5 @@ namespace AppoinmentScheduler.ViewModels
         public string Label { get; }
         public StreamGeometry ListItemIcon { get; }
     }
+    
 }

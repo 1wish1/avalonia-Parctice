@@ -4,7 +4,7 @@ using Models;
 
 namespace AppoinmentScheduler.Services
 {
-    public interface IUserService
+    public interface ISignupService
     {
         void AddUser(User user);
 

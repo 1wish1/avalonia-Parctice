@@ -1,5 +1,8 @@
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AppoinmentScheduler.Services;
+using AppoinmentScheduler.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Models;
@@ -8,11 +11,18 @@ namespace AppoinmentScheduler.ViewModels
 {
     public partial class SignUpPageViewModel : ViewModelBase
     {
-        private readonly IUserService _userService;
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        
+        
+      
+        private readonly ISignupService _signupService;
+       
 
-        public SignUpPageViewModel(IUserService userService)
-        {
-            _userService = userService;
+        public SignUpPageViewModel(ISignupService signupService, MainWindowViewModel mainWindowViewModel)
+        {   
+            _mainWindowViewModel = mainWindowViewModel;
+            _signupService = signupService;
+       
         }
 
         [ObservableProperty] private string? _username;
@@ -21,7 +31,7 @@ namespace AppoinmentScheduler.ViewModels
         [ObservableProperty] private string? _error;
 
         [RelayCommand] 
-        private void Onsubmit()
+        private async Task OnsubmitAsync()
         {
             // Clear previous error
             Error = string.Empty;
@@ -39,7 +49,39 @@ namespace AppoinmentScheduler.ViewModels
                 email = Email, 
                 password = Password 
             };
-            _userService.AddUser(user);
+            _signupService.AddUser(user);
+
+            _ = LoadSplashAsync();
+            
+        }
+
+        private async Task LoadSplashAsync(){
+
+            //remove page
+            _mainWindowViewModel.Items.Remove(_mainWindowViewModel.Items.FirstOrDefault(item => item.ModelType == typeof(LoginPageViewModel)));
+            _mainWindowViewModel.Items.Remove(_mainWindowViewModel.Items.FirstOrDefault(item => item.ModelType == typeof(SignUpPageViewModel)));
+            _mainWindowViewModel.SetCurrentPage(new HomePageViewModel());
+
+            var splashScreenVm = new SplashScreenViewModel();
+            var splashScreen = new SplashScreenView
+            {
+                DataContext = splashScreenVm
+            };
+            
+            splashScreen.Show();
+            try
+            {
+                splashScreenVm.StartupMessage = "Initailaizing Account...";
+                await Task.Delay(5000);
+                splashScreen.Close();
+            }
+            catch (TaskCanceledException)
+            {
+                //remove account 
+                // go back
+                splashScreen.Close();
+                
+            }
         }
 
         private bool ValidateInputs()

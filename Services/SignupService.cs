@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace AppoinmentScheduler.Services
 {
-    public class UserService : IUserService
+    public class SignupService : ISignupService
     {
         private readonly AppDbContext _context;
 
-        public UserService(AppDbContext context)
+        public SignupService(AppDbContext context)
         {
             _context = context;
         }

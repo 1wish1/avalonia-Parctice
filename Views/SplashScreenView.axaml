@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="500"
         x:Class="AppoinmentScheduler.Views.SplashScreenView"
         x:DataType="vm:SplashScreenViewModel"
         SystemDecorations="None"
@@ -22,8 +22,9 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              HorizontalContentAlignment="Center"
-             VerticalContentAlignment="Center">
-        Launching Application...
+             VerticalContentAlignment="Center"
+            Content="{Binding StartupMessage}">
+         
       </Label>
       <Label Grid.Row="1"
              Grid.Column="0"
@@ -39,6 +40,7 @@
       <Button Grid.Row="1" Grid.Column="1" DockPanel.Dock="Bottom" Command="{Binding Cancel}">
         Cancel
       </Button>
+      
     </Grid>
   </Border>
 

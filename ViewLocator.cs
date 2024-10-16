@@ -2,11 +2,20 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using AppoinmentScheduler.ViewModels;
+using System.Collections.Generic;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using AppoinmentScheduler.Views;
 
 namespace AppoinmentScheduler;
 
-public class ViewLocator : IDataTemplate
+public class ViewLocator : IDataTemplate 
 {
+    private readonly Dictionary<Type, Func<Control?>> _locator = new();
+    public ViewLocator(){
+        RegisterViewFactory<MainWindowViewModel , MainWindow>();
+
+    }
 
     public Control? Build(object? data)
     {
@@ -30,4 +39,12 @@ public class ViewLocator : IDataTemplate
     {
         return data is ViewModelBase;
     }
+    private void RegisterViewFactory<TViewModel, TView>()
+        where TViewModel : class
+        where TView : Control
+        => _locator.Add(
+            typeof(TViewModel),
+            Design.IsDesignMode
+                ? Activator.CreateInstance<TView>
+                : Ioc.Default.GetService<TView>);
 }
