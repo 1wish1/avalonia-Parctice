@@ -48,17 +48,13 @@ public partial class App : Application
                 DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>(),
             };
             // Show splash screen
-            await ShowSplashScreen(desktop);
-            
-            // Set up the main window
-            desktop.MainWindow = mainWin;
-            mainWin.Show();
+            await ShowSplashScreen(desktop, mainWin);
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private async Task ShowSplashScreen(IClassicDesktopStyleApplicationLifetime desktop)
+    private async Task ShowSplashScreen(IClassicDesktopStyleApplicationLifetime desktop, MainWindow mainWin)
     {
         var splashScreenVm = new SplashScreenViewModel();
         var splashScreen = new SplashScreenView
@@ -81,14 +77,16 @@ public partial class App : Application
             splashScreen.Close();
             return;
         }
-        splashScreen.Close();
-                
+        // Set up the main window
+        desktop.MainWindow = mainWin;
+        mainWin.Show();
+        splashScreen.Close();   
     }
 
     private void ConfigureViewModels(IServiceCollection services)
     {
         // Register services
-        services.AddTransient<ISignupService, SignupService>();
+        services.AddTransient<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
 
@@ -108,7 +106,7 @@ public partial class App : Application
     private void ConfigureViews(IServiceCollection services)
     {
         // Register services
-        services.AddTransient<ISignupService, SignupService>();
+        services.AddTransient<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
 

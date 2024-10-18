@@ -13,13 +13,13 @@ namespace AppoinmentScheduler.ViewModels
     public partial class SignUpPageViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly ISignupService _signupService;
+        private readonly IUserService _userService;
         private readonly ISessionService _sessionService;
     
-        public SignUpPageViewModel(ISignupService signupService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
+        public SignUpPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
         {   
             _mainWindowViewModel = mainWindowViewModel;
-            _signupService = signupService;
+            _userService = userService;
             _sessionService = SessionService;       
         }
 
@@ -43,7 +43,7 @@ namespace AppoinmentScheduler.ViewModels
             {
                 AccessToken = Guid.NewGuid().ToString(),
                 ExpiresIn = 3600, // one hour
-                IssuedAt = DateTime.UtcNow
+                IssuedAt = DateTime.UtcNow,
             };
 
             // Create user object and add it
@@ -54,8 +54,9 @@ namespace AppoinmentScheduler.ViewModels
                 password = Password,
                 token = oAuthToken.AccessToken
             };
+
             _ = _sessionService.SaveSessionAsync(oAuthToken);
-            _signupService.AddUser(user);
+            _userService.AddUser(user);
 
             _ = LoadSplashAsync();
             

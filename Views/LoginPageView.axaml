@@ -3,25 +3,25 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AppoinmentScheduler.Views.LoginPageView">
+             xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels" 
+             x:Class="AppoinmentScheduler.Views.LoginPageView"
+             x:DataType="vm:LoginPageViewModel">
              
-  <ScrollViewer> 
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Grid RowDefinitions="*, *" ColumnDefinitions="*, *" ShowGridLines="True"> 
-          <StackPanel Grid.Row="0" Grid.Column="0">
-            
-          <Border CornerRadius="20" Background="Red" Width="400" Height="400" >
-            <Canvas Background="Transparent" Width="400" Height="400">
-              <TextBlock  Canvas.Top="10">asd</TextBlock>
-              
-            </Canvas>
-          </Border>
-          </StackPanel>
+   <StackPanel>
+    
+      <TextBlock Text="Login"/>
+      <Label Name="UserNameLabel" Content="User name" />
+      <TextBox Name="UserNameTextBox" Text="{Binding Username, Mode=TwoWay}" />
 
-         
-        </Grid>
-         
-    </StackPanel>
-  </ScrollViewer>
+      <Label Name="EmailLabel" Content="Email" />
+      <TextBox Name="EmailTextBox" Text="{Binding Email, Mode=TwoWay}"/>
+
+      <Label Name="PasswordLabel" Content="Password"/>
+      <TextBox Name="PasswordTextBox"  Text="{Binding Password, Mode=TwoWay}"/>
+      
+      <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
+
+      <TextBlock Text="{Binding Error}" Foreground="Red"/>      
+  </StackPanel>
 
 </UserControl>
