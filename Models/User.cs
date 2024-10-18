@@ -3,9 +3,12 @@ namespace Models
     public class User
     {
         public int Id { get; set; } // Primary Key
-        public string user_name { get; set; }
-        public string email { get; set; }
-        public string password { get; set; } // Consider hashing passwords for security
+        public required string user_name { get; set; }
+        public required string email { get; set; }
+        public required string password { get; set; } // Consider hashing passwords for security
+        public required string token { get; set; } 
+
+        // add token
     }    
 }
 

@@ -2,20 +2,18 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-public interface ISessionManager
+public class SessionService : ISessionService
 {
-    Task SaveSessionAsync(OAuthToken token);
-    Task<OAuthToken?> LoadSessionAsync();
-    void Logout();
-}
-
-
-public class SessionManager : ISessionManager
-{
-    private const string SessionFilePath = "session.json";
+    private const string SessionFilePath = "/home/karl/AppoinmentScheduler/log/session.json";
 
     public async Task SaveSessionAsync(OAuthToken token)
     {
+        var directory = Path.GetDirectoryName(SessionFilePath);
+        // Ensure the directory exists
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
         var jsonData = JsonSerializer.Serialize(token);
         await File.WriteAllTextAsync(SessionFilePath, jsonData);
     }
@@ -34,4 +32,14 @@ public class SessionManager : ISessionManager
         if (File.Exists(SessionFilePath))
             File.Delete(SessionFilePath);
     }
+    public bool Login()
+    {
+        //validation
+        if (File.Exists(SessionFilePath)) return true;
+        return false;
+    }
+    
+
+
+    
 }

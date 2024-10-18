@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,17 +13,14 @@ namespace AppoinmentScheduler.ViewModels
     public partial class SignUpPageViewModel : ViewModelBase
     {
         private readonly MainWindowViewModel _mainWindowViewModel;
-        
-        
-      
         private readonly ISignupService _signupService;
-       
-
-        public SignUpPageViewModel(ISignupService signupService, MainWindowViewModel mainWindowViewModel)
+        private readonly ISessionService _sessionService;
+    
+        public SignUpPageViewModel(ISignupService signupService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
         {   
             _mainWindowViewModel = mainWindowViewModel;
             _signupService = signupService;
-       
+            _sessionService = SessionService;       
         }
 
         [ObservableProperty] private string? _username;
@@ -41,14 +39,22 @@ namespace AppoinmentScheduler.ViewModels
             {
                 return; // Stop submission if validation fails
             }
+            OAuthToken oAuthToken = new OAuthToken
+            {
+                AccessToken = Guid.NewGuid().ToString(),
+                ExpiresIn = 3600, // one hour
+                IssuedAt = DateTime.UtcNow
+            };
 
             // Create user object and add it
-            var user = new User 
+            User user = new User 
             { 
                 user_name = Username, 
                 email = Email, 
-                password = Password 
+                password = Password,
+                token = oAuthToken.AccessToken
             };
+            _ = _sessionService.SaveSessionAsync(oAuthToken);
             _signupService.AddUser(user);
 
             _ = LoadSplashAsync();

@@ -50,6 +50,9 @@ namespace AppoinmentScheduler.ViewModels
             new ListItemTemplate(typeof(LoginPageViewModel), "ArrowRightRegular"),
             new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular"),
         };
+        
+        
+        // set the current page base on token
         public void SetCurrentPage(ViewModelBase viewModelBase){
             CurrentPage = viewModelBase;
         }

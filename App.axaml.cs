@@ -1,7 +1,7 @@
 using AppoinmentScheduler.Services;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
+
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using AppoinmentScheduler.ViewModels;
@@ -11,7 +11,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics.CodeAnalysis;
+
 using System.Threading.Tasks;
 using Data;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +36,9 @@ public partial class App : Application
 
             // Set up dependency injection
             var services = new ServiceCollection();
-            ConfigureServices(services); // Service registration
+            ConfigureViewModels(services);
+            ConfigureViews(services); // Service registration
+
             var serviceProvider = services.BuildServiceProvider();
             Ioc.Default.ConfigureServices(serviceProvider); // Configure IoC
 
@@ -46,34 +48,17 @@ public partial class App : Application
                 DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>(),
             };
             // Show splash screen
-            await ShowSplashScreen(desktop, mainWin);
-
+            await ShowSplashScreen(desktop);
+            
             // Set up the main window
-            
-            
+            desktop.MainWindow = mainWin;
+            mainWin.Show();
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void ConfigureServices(IServiceCollection services)
-    {
-        // Register services
-        services.AddTransient<ISignupService, SignupService>();
-        services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
-
-        // Register ViewModels
-        services.AddSingleton<MainWindowViewModel>();
-        services.AddTransient<HomePageViewModel>();
-        services.AddTransient<LoginPageViewModel>();
-        services.AddTransient<SignUpPageViewModel>();
-
-        // Register Messenger
-        services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-    }
-
-    private async Task ShowSplashScreen(IClassicDesktopStyleApplicationLifetime desktop, MainWindow mainWin)
+    private async Task ShowSplashScreen(IClassicDesktopStyleApplicationLifetime desktop)
     {
         var splashScreenVm = new SplashScreenViewModel();
         var splashScreen = new SplashScreenView
@@ -96,13 +81,47 @@ public partial class App : Application
             splashScreen.Close();
             return;
         }
-
-        
-        
-        // Set up the main window
-        desktop.MainWindow = mainWin;
-        mainWin.Show();
         splashScreen.Close();
                 
+    }
+
+    private void ConfigureViewModels(IServiceCollection services)
+    {
+        // Register services
+        services.AddTransient<ISignupService, SignupService>();
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
+
+        // Register ViewModels
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddTransient<HomePageViewModel>();
+        services.AddTransient<LoginPageViewModel>();
+        services.AddTransient<SignUpPageViewModel>();
+
+        // Register Messenger
+        services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+        // Register session
+        services.AddSingleton<ISessionService, SessionService>();
+    }
+
+    private void ConfigureViews(IServiceCollection services)
+    {
+        // Register services
+        services.AddTransient<ISignupService, SignupService>();
+        services.AddDbContext<AppDbContext>(options =>
+            options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
+
+        // Register ViewModels
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddTransient<HomePageViewModel>();
+        services.AddTransient<LoginPageViewModel>();
+        services.AddTransient<SignUpPageViewModel>();
+
+        // Register Messenger
+        services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+
+        // Register session
+        services.AddSingleton<ISessionService, SessionService>();
     }
 }
