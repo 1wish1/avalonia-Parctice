@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AppoinmentScheduler.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -8,23 +9,45 @@ namespace AppoinmentScheduler.ViewModels;
 
 public partial class LoginPageViewModel: ViewModelBase
 {
-        [ObservableProperty] private string? _username;
-        [ObservableProperty] private string? _email;
-        [ObservableProperty] private string? _password;
+        [ObservableProperty] private string _username;
+        [ObservableProperty] private string _email;
+        [ObservableProperty] private string _password;
         [ObservableProperty] private string? _error;
+
+        private readonly MainWindowViewModel _mainWindowViewModel;
+        private readonly IUserService _userService;
+        private readonly ISessionService _sessionService;
+    
+        public LoginPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
+        {   
+            _mainWindowViewModel = mainWindowViewModel;
+            _userService = userService;
+            _sessionService = SessionService;       
+        }
 
         [RelayCommand] private async Task OnsubmitAsync()
         {
-            Console.WriteLine(Username + Email+  Password);
+            Error = string.Empty;
+
+            // Validate inputs
+            if (!ValidateInputs())
+            {
+                return; // Stop submission if validation fails
+            }
+
+            //set new token
+            OAuthToken oAuthToken = new OAuthToken
+            {
+                AccessToken = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
+                ExpiresIn = 3600, // one hour
+                IssuedAt = DateTime.UtcNow,
+            };
+            _ = _sessionService.SaveSessionAsync(oAuthToken);
+
+            _userService.VerifyUser(_password,_email, _username);
+
 
         }
-
-
-
-
-
-
-
 
 
 

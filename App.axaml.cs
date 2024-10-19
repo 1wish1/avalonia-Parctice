@@ -20,7 +20,7 @@ namespace AppoinmentScheduler;
 
 public partial class App : Application
 {
-    private object serviceProvider;
+
 
     public override void Initialize()
     {
@@ -50,7 +50,6 @@ public partial class App : Application
             // Show splash screen
             await ShowSplashScreen(desktop, mainWin);
         }
-
         base.OnFrameworkInitializationCompleted();
     }
 

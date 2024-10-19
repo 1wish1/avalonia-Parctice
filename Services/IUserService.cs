@@ -8,6 +8,7 @@ namespace AppoinmentScheduler.Services
     {
         void AddUser(User user);
 
-        String getUserName();
+        
+        bool VerifyUser(string inputPassword, string inputEmail, string inputUserName);
     }
 }

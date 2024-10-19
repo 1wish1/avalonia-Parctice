@@ -41,7 +41,7 @@ namespace AppoinmentScheduler.ViewModels
             }
             OAuthToken oAuthToken = new OAuthToken
             {
-                AccessToken = Guid.NewGuid().ToString(),
+                AccessToken = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
                 ExpiresIn = 3600, // one hour
                 IssuedAt = DateTime.UtcNow,
             };
@@ -52,13 +52,13 @@ namespace AppoinmentScheduler.ViewModels
                 user_name = Username, 
                 email = Email, 
                 password = Password,
-                token = oAuthToken.AccessToken
+                token = oAuthToken.AccessToken,
+                role = 1
             };
 
             _ = _sessionService.SaveSessionAsync(oAuthToken);
-            _userService.AddUser(user);
-
             _ = LoadSplashAsync();
+            _userService.AddUser(user);
             
         }
 
@@ -96,7 +96,7 @@ namespace AppoinmentScheduler.ViewModels
             // Validate Username
             if (string.IsNullOrWhiteSpace(Username) || Username.Length < 3)
             {
-                Error = "Username must be at least 3 characters long.";
+                Error = "Username must be at least 3 characters long." ;
                 return false;
             }
 

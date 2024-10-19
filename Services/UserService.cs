@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Data;
 using Models;
 using System.Linq;
+using System;
 
 namespace AppoinmentScheduler.Services
 {
@@ -17,21 +18,27 @@ namespace AppoinmentScheduler.Services
 
         public void AddUser(User user)
         {
+            user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
             _context.Users.Add(user);
             _context.SaveChanges();
         }
 
-        public string getUserName()
+        public bool VerifyUser(string inputPassword, string inputEmail, string inputUserName)
         {
-            // Fetch the user based on the provided username
+            
             var user = _context.Users
-                .FromSqlRaw("SELECT * FROM Users WHERE id = 2004")
-                .FirstOrDefault();
-
-            // Check if the user was found and return the username, or return null if not found
-            return user?.user_name; // Using null-conditional operator
+            .FromSqlRaw("SELECT user_name, email, password FROM Users WHERE user_name = {0} AND email = {1}", inputUserName, inputEmail)
+            .Select(u => new { u.user_name, u.email, u.password })
+            .FirstOrDefault();
+             
+            if (user == null ){
+                return false;
+            }else if(!BCrypt.Net.BCrypt.Verify(inputPassword, user.password)){
+                return false;
+            }
+            Console.WriteLine(user.user_name + user.password + user.email);
+                return true;
         }
-
 
         
     }
