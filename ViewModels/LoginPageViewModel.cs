@@ -7,25 +7,17 @@ using CommunityToolkit.Mvvm.Input;
 
 namespace AppoinmentScheduler.ViewModels;
 
-public partial class LoginPageViewModel: ViewModelBase
+public partial class LoginPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel) : ViewModelBase
 {
-        [ObservableProperty] private string _username;
-        [ObservableProperty] private string _email;
-        [ObservableProperty] private string _password;
+        [ObservableProperty] private string? _username;
+        [ObservableProperty] private string? _email;
+        [ObservableProperty] private string? _password;
         [ObservableProperty] private string? _error;
 
-        private readonly MainWindowViewModel _mainWindowViewModel;
-        private readonly IUserService _userService;
-        private readonly ISessionService _sessionService;
-    
-        public LoginPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
-        {   
-            _mainWindowViewModel = mainWindowViewModel;
-            _userService = userService;
-            _sessionService = SessionService;       
-        }
+        private readonly MainWindowViewModel _mainWindowViewModel = mainWindowViewModel;
+        private readonly IUserService _userService = userService;
 
-        [RelayCommand] private async Task OnsubmitAsync()
+    [RelayCommand] private async Task OnsubmitAsync()
         {
             Error = string.Empty;
 
@@ -34,17 +26,7 @@ public partial class LoginPageViewModel: ViewModelBase
             {
                 return; // Stop submission if validation fails
             }
-
-            //set new token
-            OAuthToken oAuthToken = new OAuthToken
-            {
-                AccessToken = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
-                ExpiresIn = 3600, // one hour
-                IssuedAt = DateTime.UtcNow,
-            };
-            _ = _sessionService.SaveSessionAsync(oAuthToken);
-
-            _userService.VerifyUser(_password,_email, _username);
+            _userService.VerifyUser(Password, Email, Username);
 
 
         }

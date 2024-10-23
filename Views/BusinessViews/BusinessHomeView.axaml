@@ -1,0 +1,12 @@
+<avalonia:UserControl xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:avalonia="https://github.com/avaloniaui"
+                     x:Class="AppoinmentScheduler.Views.BusinessViews.BusinessHomeView">
+    <StackPanel Margin="20">
+        <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
+        
+        
+        
+        <!-- Add more UI elements as needed -->
+    </StackPanel>
+</avalonia:UserControl>

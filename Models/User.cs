@@ -11,6 +11,7 @@ namespace Models
          public required int role { get; set; }
        
     }    
+
     
 }
 

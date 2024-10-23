@@ -24,6 +24,7 @@ namespace AppoinmentScheduler.ViewModels
         }
 
         [ObservableProperty] private string? _username;
+        [ObservableProperty] private string? role;
         [ObservableProperty] private string? _email;
         [ObservableProperty] private string? _password;
         [ObservableProperty] private string? _error;
@@ -55,19 +56,19 @@ namespace AppoinmentScheduler.ViewModels
                 token = oAuthToken.AccessToken,
                 role = 1
             };
+            oAuthToken.role = user.role;
 
             _ = _sessionService.SaveSessionAsync(oAuthToken);
-            _ = LoadSplashAsync();
             _userService.AddUser(user);
+            _mainWindowViewModel.SetView();
+            _ = LoadSplashAsync();
             
         }
 
         private async Task LoadSplashAsync(){
 
             //remove page
-            _mainWindowViewModel.Items.Remove(_mainWindowViewModel.Items.FirstOrDefault(item => item.ModelType == typeof(LoginPageViewModel)));
-            _mainWindowViewModel.Items.Remove(_mainWindowViewModel.Items.FirstOrDefault(item => item.ModelType == typeof(SignUpPageViewModel)));
-            _mainWindowViewModel.SetCurrentPage(new HomePageViewModel());
+            // load main viewmodel
 
             var splashScreenVm = new SplashScreenViewModel();
             var splashScreen = new SplashScreenView

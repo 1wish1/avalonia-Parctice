@@ -34,7 +34,6 @@ public class SessionService : ISessionService
     }
     public bool Login()
     {
-        //validation
         if (File.Exists(SessionFilePath)) return true;
         return false;
     }

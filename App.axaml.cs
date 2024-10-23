@@ -5,16 +5,20 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using AppoinmentScheduler.ViewModels;
+
 using AppoinmentScheduler.Views;
 
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using System;
+
 
 using System.Threading.Tasks;
 using Data;
 using Microsoft.EntityFrameworkCore;
+using AppoinmentScheduler.ViewModels.BusinessViewModels;
+
+
 
 namespace AppoinmentScheduler;
 
@@ -82,6 +86,19 @@ public partial class App : Application
         splashScreen.Close();   
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void ConfigureViewModels(IServiceCollection services)
     {
         // Register services
@@ -94,6 +111,14 @@ public partial class App : Application
         services.AddTransient<HomePageViewModel>();
         services.AddTransient<LoginPageViewModel>();
         services.AddTransient<SignUpPageViewModel>();
+
+        // Register ViewModels Business
+        services.AddTransient<BusinessHomeViewModel>();
+       
+       
+
+         // Register ViewModels Cleint
+     
 
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
@@ -115,6 +140,13 @@ public partial class App : Application
         services.AddTransient<LoginPageViewModel>();
         services.AddTransient<SignUpPageViewModel>();
 
+        // Register ViewModels Business
+       services.AddTransient<BusinessHomeViewModel>();
+        
+       
+
+         // Register ViewModels Cleint
+      
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 

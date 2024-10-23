@@ -6,16 +6,26 @@ using Avalonia.Media;
 using Avalonia.Controls;
 using Avalonia.Controls.Converters;
 using Microsoft.Extensions.DependencyInjection;
+using AppoinmentScheduler.Services;
+using AppoinmentScheduler.ViewModels.BusinessViewModels;
+
+
+
 
 namespace AppoinmentScheduler.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly IUserService _userService;
+        
+        
 
-        public MainWindowViewModel(IServiceProvider serviceProvider)
+        public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService)
         {
             _serviceProvider = serviceProvider;
+            _userService = userService;
+            
         }
 
         [ObservableProperty] 
@@ -44,11 +54,12 @@ namespace AppoinmentScheduler.ViewModels
             IsPaneOpen = !IsPaneOpen;
         }
 
-        public ObservableCollection<ListItemTemplate> Items { get; } = new()
+       public ObservableCollection<ListItemTemplate> Items { get; set; } = new()
         {
             new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"),
             new ListItemTemplate(typeof(LoginPageViewModel), "ArrowRightRegular"),
-            new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular"),
+            new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular")
+           // new ListItemTemplate(typeof(DashBoardViewModel), "HomeRegular")
         };
         
         
@@ -56,7 +67,34 @@ namespace AppoinmentScheduler.ViewModels
         public void SetCurrentPage(ViewModelBase viewModelBase){
             CurrentPage = viewModelBase;
         }
+
+        public void SetView(){
+            // if(_userService.Role() == 1){//bussines
+            //     Items = new(){
+            //         new ListItemTemplate(typeof(HomeBusinessViewModel), "HomeRegular"),
+            //     };
+            //     SetCurrentPage(new HomeBusinessViewModel());
+
+            // }else if(_userService.Role() == 0){
+            //     Items = new(){
+            //         new ListItemTemplate(typeof(HomeClientViewModel), "HomeRegular"),
+            //     };
+            //     SetCurrentPage(new HomeClientViewModel());
+            // }
+         
+         SetCurrentPage(new BusinessHomeViewModel());
+            
+        } 
+        
+
+
     }
+
+
+
+
+
+    
 
     public class ListItemTemplate
     {
