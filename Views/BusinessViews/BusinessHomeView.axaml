@@ -1,7 +1,11 @@
 <avalonia:UserControl xmlns="https://github.com/avaloniaui"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:avalonia="https://github.com/avaloniaui"
-                     x:Class="AppoinmentScheduler.Views.BusinessViews.BusinessHomeView">
+
+                     x:Class="AppoinmentScheduler.Views.BusinessViews.BusinessHomeView"
+                     xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels" 
+                     x:DataType="vm:BusinessHomeViewModel"
+                     >
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
         
