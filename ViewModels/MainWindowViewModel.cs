@@ -21,15 +21,20 @@ namespace AppoinmentScheduler.ViewModels
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IUserService _userService;
+
+        private readonly ISessionService _sessionService;
         
         
 
-        public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService)
+        public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService,ISessionService sessionService)
         {
             _serviceProvider = serviceProvider;
             _userService = userService;
-            
+            _sessionService = sessionService;
+            _ = Initialize();
         }
+
+      
 
         [ObservableProperty] 
         private bool _isPaneOpen = true;
@@ -92,6 +97,15 @@ namespace AppoinmentScheduler.ViewModels
         
             
         } 
+        private async Task Initialize()
+        {
+            if (await _sessionService.SessionLogin())
+            {
+                SetViewAsync(_sessionService.GetUser());
+                _userService.SetUser(_sessionService.GetUser());
+                //set imessager to send info 
+            }
+        }
         
 
 

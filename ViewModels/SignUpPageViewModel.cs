@@ -2,10 +2,12 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AppoinmentScheduler.ObjMessages;
 using AppoinmentScheduler.Services;
 using AppoinmentScheduler.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Models;
 
 namespace AppoinmentScheduler.ViewModels
@@ -15,12 +17,15 @@ namespace AppoinmentScheduler.ViewModels
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly IUserService _userService;
         private readonly ISessionService _sessionService;
-    
-        public SignUpPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
+
+        private readonly IMessenger _messenger;//
+                        
+        public SignUpPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService, IMessenger messenger)
         {   
             _mainWindowViewModel = mainWindowViewModel;
             _userService = userService;
             _sessionService = SessionService;       
+            _messenger = messenger;
         }
 
         [ObservableProperty] private string? _username;
@@ -56,7 +61,6 @@ namespace AppoinmentScheduler.ViewModels
                 token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
                 role = 1
             };
-
             _ = _userService.AddUser(user, oAuthToken);
             _mainWindowViewModel.SetViewAsync(_userService.getUser());
             _ = LoadSplashAsync();

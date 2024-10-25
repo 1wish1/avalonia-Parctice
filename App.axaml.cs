@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using AppoinmentScheduler.ViewModels.BusinessViewModels;
+using AppoinmentScheduler.ViewModels.ClientViewModels;
 
 
 
@@ -51,11 +52,21 @@ public partial class App : Application
             {
                 DataContext = serviceProvider.GetRequiredService<MainWindowViewModel>(),
             };
+           
+        
             // Show splash screen
             await ShowSplashScreen(desktop, mainWin);
         }
+
+
+        
         base.OnFrameworkInitializationCompleted();
     }
+
+
+
+
+
 
     private async Task ShowSplashScreen(IClassicDesktopStyleApplicationLifetime desktop, MainWindow mainWin)
     {
@@ -83,6 +94,7 @@ public partial class App : Application
         // Set up the main window
         desktop.MainWindow = mainWin;
         mainWin.Show();
+        
         splashScreen.Close();   
     }
 
@@ -105,6 +117,7 @@ public partial class App : Application
         services.AddTransient<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
+        services.AddSingleton<ISessionService, SessionService>();
 
         // Register ViewModels
         services.AddSingleton<MainWindowViewModel>();
@@ -115,16 +128,14 @@ public partial class App : Application
         // Register ViewModels Business
         services.AddTransient<BusinessHomeViewModel>();
        
-       
-
-         // Register ViewModels Cleint
+        // Register ViewModels Cleint
+         services.AddTransient<ClientHomeViewModel>();
      
-
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-        // Register session
-        services.AddSingleton<ISessionService, SessionService>();
+        
+        
     }
 
     private void ConfigureViews(IServiceCollection services)
@@ -133,6 +144,7 @@ public partial class App : Application
         services.AddTransient<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
+        services.AddSingleton<ISessionService, SessionService>();
 
         // Register ViewModels
         services.AddSingleton<MainWindowViewModel>();
@@ -141,16 +153,14 @@ public partial class App : Application
         services.AddTransient<SignUpPageViewModel>();
 
         // Register ViewModels Business
-       services.AddTransient<BusinessHomeViewModel>();
-        
-       
+        services.AddTransient<BusinessHomeViewModel>();
 
-         // Register ViewModels Cleint
+        // Register ViewModels Cleint
+        services.AddTransient<ClientHomeViewModel>();
       
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-        // Register session
-        services.AddSingleton<ISessionService, SessionService>();
+        
     }
 }

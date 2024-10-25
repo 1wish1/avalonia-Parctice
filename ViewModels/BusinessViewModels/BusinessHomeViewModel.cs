@@ -8,13 +8,13 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
     {
         private User _user;
 
-        [ObservableProperty] private string? _username =  user.user_name;
+        [ObservableProperty] private string? _username;
 
         // Constructor
         public BusinessHomeViewModel(User user)
         {
-            // this._user = user;
-            // _username = user.user_name;
+            this._user = user;
+            _username = user.user_name;
         }
 
     }

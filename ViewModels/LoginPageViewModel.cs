@@ -26,7 +26,7 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
             {
                 return; // Stop submission if validation fails
             }
-            if(await _userService.VerifyUser(Password, Email, Username)){
+            if(await _userService.Login(Password, Email, Username)){
                 
                 _mainWindowViewModel.SetViewAsync(_userService.getUser());
             }else{
