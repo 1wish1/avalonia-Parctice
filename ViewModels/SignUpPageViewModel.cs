@@ -40,27 +40,25 @@ namespace AppoinmentScheduler.ViewModels
             {
                 return; // Stop submission if validation fails
             }
+            
             OAuthToken oAuthToken = new OAuthToken
             {
-                AccessToken = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
+                AccessToken = Guid.NewGuid().ToString(),
                 ExpiresIn = 3600, // one hour
                 IssuedAt = DateTime.UtcNow,
             };
 
-            // Create user object and add it
             User user = new User 
             { 
                 user_name = Username, 
                 email = Email, 
                 password = Password,
-                token = oAuthToken.AccessToken,
+                token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
                 role = 1
             };
-            oAuthToken.role = user.role;
 
-            _ = _sessionService.SaveSessionAsync(oAuthToken);
-            _userService.AddUser(user);
-            _mainWindowViewModel.SetView();
+            _ = _userService.AddUser(user, oAuthToken);
+            _mainWindowViewModel.SetViewAsync(_userService.getUser());
             _ = LoadSplashAsync();
             
         }

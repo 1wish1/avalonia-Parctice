@@ -1,13 +1,21 @@
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-
+using Models;
 namespace AppoinmentScheduler.ViewModels.BusinessViewModels
 {
-    public class BusinessHomeViewModel : ViewModelBase
+       public partial class BusinessHomeViewModel : ViewModelBase
     {
-        public BusinessHomeViewModel()
+        private User _user;
+
+        [ObservableProperty] private string? _username =  user.user_name;
+
+        // Constructor
+        public BusinessHomeViewModel(User user)
         {
-           
+            // this._user = user;
+            // _username = user.user_name;
         }
+
     }
 }

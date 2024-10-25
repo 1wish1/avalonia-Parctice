@@ -8,6 +8,9 @@ using Avalonia.Controls.Converters;
 using Microsoft.Extensions.DependencyInjection;
 using AppoinmentScheduler.Services;
 using AppoinmentScheduler.ViewModels.BusinessViewModels;
+using AppoinmentScheduler.ViewModels.ClientViewModels;
+using System.Threading.Tasks;
+using Models;
 
 
 
@@ -68,21 +71,25 @@ namespace AppoinmentScheduler.ViewModels
             CurrentPage = viewModelBase;
         }
 
-        public void SetView(){
-            // if(_userService.Role() == 1){//bussines
-            //     Items = new(){
-            //         new ListItemTemplate(typeof(HomeBusinessViewModel), "HomeRegular"),
-            //     };
-            //     SetCurrentPage(new HomeBusinessViewModel());
+        public void SetViewAsync(User user){
+            Console.WriteLine("SetViewAsync name");
+            Console.WriteLine(user.user_name);
+            
+            if(user.role == 1){//bussines
+                Items = new(){
+                    new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"),
+                };
 
-            // }else if(_userService.Role() == 0){
-            //     Items = new(){
-            //         new ListItemTemplate(typeof(HomeClientViewModel), "HomeRegular"),
-            //     };
-            //     SetCurrentPage(new HomeClientViewModel());
-            // }
+                SetCurrentPage(new BusinessHomeViewModel( user));
+
+            }else if(user.role == 0){
+                Items = new(){
+                    new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"),
+                };
+                SetCurrentPage(new ClientHomeViewModel(user));
+            }
          
-         SetCurrentPage(new BusinessHomeViewModel());
+        
             
         } 
         
@@ -91,10 +98,6 @@ namespace AppoinmentScheduler.ViewModels
     }
 
 
-
-
-
-    
 
     public class ListItemTemplate
     {
