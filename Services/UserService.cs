@@ -6,6 +6,8 @@ using System.Linq;
 using System;
 using AppoinmentScheduler.ViewModels;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.Messaging;
+using AppoinmentScheduler.ObjMessages;
 
 namespace AppoinmentScheduler.Services
 {
@@ -13,19 +15,19 @@ namespace AppoinmentScheduler.Services
     {
         private readonly AppDbContext _context;
         private readonly ISessionService _sessionService;
+        public User? _user { get; private set; }
 
-        private User? _user {get ; set;} 
+        private readonly IMessenger _messenger;
 
-
-
-        public UserService(AppDbContext context, ISessionService SessionService)
+        public UserService(AppDbContext context, ISessionService SessionService, IMessenger messenger )
         {
             _sessionService = SessionService;
             _context = context;
-        
+            _messenger = messenger;
+
         }
      
-        public async Task AddUser(User user, OAuthToken oAuthToken)
+        public void AddUser(User user, OAuthToken oAuthToken)
         {
             user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
             
@@ -33,25 +35,23 @@ namespace AppoinmentScheduler.Services
             _context.SaveChanges();
             
             User newUser = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE user_name = {0} and password = {1}", user.user_name, user.password).FirstOrDefault();
-            _user =  newUser;
 
-            Console.WriteLine("AddUser name" + user.user_name);
+            if(newUser is null) return;
+            SendData(newUser);
 
             oAuthToken.role = user.role;
-            oAuthToken.id = user.id;
 
+            oAuthToken.id = user.id;
+            
             _ = _sessionService.SaveSessionAsync(oAuthToken);
         }
 
-        public async Task<bool> Login(string inputPassword, string inputEmail, string inputUserName)
+
+        public bool Login(string inputPassword, string inputEmail, string inputUserName)
         { 
             var pulluser = _context.Users
             .FromSqlRaw("SELECT id, user_name, email, password, token, role FROM Users WHERE user_name = {0} AND email = {1}", inputUserName, inputEmail)
             .FirstOrDefault();
-            
-            Console.WriteLine($" {pulluser.id} ,{pulluser.user_name}, {pulluser.email}, {pulluser.password}, {pulluser.token}, {pulluser.role}");
-            
-
             if (pulluser == null ){
                 return false;
             }else if(!BCrypt.Net.BCrypt.Verify(inputPassword, pulluser.password)){
@@ -69,31 +69,23 @@ namespace AppoinmentScheduler.Services
 
                 _context.Database.ExecuteSqlRaw("UPDATE Users SET token = {0} WHERE user_name = {1} AND email = {2}", BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken), inputUserName, inputEmail);
             
-                _user = new User 
-                {   
-                    id = pulluser.id,
-                    user_name = pulluser.user_name, 
-                    email = pulluser.email, 
-                    password = pulluser.password,
-                    token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
-                    role = pulluser.role
-                };
-                
-                _ = _sessionService.SaveSessionAsync(oAuthToken);
+                pulluser.token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken);
 
-                
+                SendData(pulluser);
+                _ = _sessionService.SaveSessionAsync(oAuthToken); 
             }
                 return true;
         }
-       
-        public User getUser(){
-            Console.WriteLine("getUser name" + _user.user_name);
+
+        public void SendData(User user)
+        {
+             _messenger.Send(new UserMessage(user));
+        }
+        public User? getUser()
+        {
             return _user;
         }
-       
-        public void SetUser(User? user){
-            _user = user;
-        }
+
 
         
     }

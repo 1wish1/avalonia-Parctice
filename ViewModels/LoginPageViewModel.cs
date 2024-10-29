@@ -17,7 +17,7 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
         private readonly MainWindowViewModel _mainWindowViewModel = mainWindowViewModel;
         private readonly IUserService _userService = userService;
 
-    [RelayCommand] private async Task OnsubmitAsync()
+    [RelayCommand] private void Onsubmit()
         {
             Error = string.Empty;
 
@@ -26,9 +26,10 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
             {
                 return; // Stop submission if validation fails
             }
-            if(await _userService.Login(Password, Email, Username)){
+            if(_userService.Login(Password, Email, Username)){
                 
-                _mainWindowViewModel.SetViewAsync(_userService.getUser());
+                _mainWindowViewModel.SetView();
+                
             }else{
                 return;
             }

@@ -20,6 +20,17 @@
       
       <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
 
+       <Label Name="RoleLabel" Content="Normal User as default" />
+
+      <RadioButton GroupName="Role"
+             Content="Normal User"
+             IsChecked="{Binding IsClient, Mode=TwoWay}"/>
+      <RadioButton GroupName="Role"
+             Content="Business User"
+             IsChecked="{Binding IsBusiness, Mode=TwoWay}"/>
+
+
       <TextBlock Text="{Binding Error}" Foreground="Red"/>      
+      
   </StackPanel>
 </UserControl>

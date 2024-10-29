@@ -18,6 +18,8 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using AppoinmentScheduler.ViewModels.BusinessViewModels;
 using AppoinmentScheduler.ViewModels.ClientViewModels;
+using AppoinmentScheduler.Views.BusinessViews;
+
 
 
 
@@ -114,10 +116,11 @@ public partial class App : Application
     private void ConfigureViewModels(IServiceCollection services)
     {
         // Register services
-        services.AddTransient<IUserService, UserService>();
+        services.AddSingleton<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
         services.AddSingleton<ISessionService, SessionService>();
+        
 
         // Register ViewModels
         services.AddSingleton<MainWindowViewModel>();
@@ -126,10 +129,15 @@ public partial class App : Application
         services.AddTransient<SignUpPageViewModel>();
 
         // Register ViewModels Business
-        services.AddTransient<BusinessHomeViewModel>();
-       
+        services.AddSingleton<BusinessHomeViewModel>();
+        services.AddSingleton<ManagementViewModel>();
+        services.AddSingleton<ProfileViewModel>();
+        services.AddSingleton<ServiceView>();
+      
+        
+
         // Register ViewModels Cleint
-         services.AddTransient<ClientHomeViewModel>();
+         services.AddSingleton<ClientHomeViewModel>();
      
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
@@ -141,10 +149,11 @@ public partial class App : Application
     private void ConfigureViews(IServiceCollection services)
     {
         // Register services
-        services.AddTransient<IUserService, UserService>();
+        services.AddSingleton<IUserService, UserService>();
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
         services.AddSingleton<ISessionService, SessionService>();
+       
 
         // Register ViewModels
         services.AddSingleton<MainWindowViewModel>();
@@ -153,8 +162,11 @@ public partial class App : Application
         services.AddTransient<SignUpPageViewModel>();
 
         // Register ViewModels Business
-        services.AddTransient<BusinessHomeViewModel>();
-
+        services.AddSingleton<BusinessHomeViewModel>();
+        services.AddSingleton<ManagementViewModel>();
+        services.AddSingleton<ProfileViewModel>();
+        services.AddSingleton<ServiceView>();
+        
         // Register ViewModels Cleint
         services.AddTransient<ClientHomeViewModel>();
       

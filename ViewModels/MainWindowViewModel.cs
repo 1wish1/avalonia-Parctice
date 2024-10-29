@@ -11,6 +11,9 @@ using AppoinmentScheduler.ViewModels.BusinessViewModels;
 using AppoinmentScheduler.ViewModels.ClientViewModels;
 using System.Threading.Tasks;
 using Models;
+using CommunityToolkit.Mvvm.Messaging;
+using AppoinmentScheduler.ObjMessages;
+using System.Collections.Generic;
 
 
 
@@ -23,15 +26,30 @@ namespace AppoinmentScheduler.ViewModels
         private readonly IUserService _userService;
 
         private readonly ISessionService _sessionService;
-        
+
+        private User _user { get; set; } 
+
+        private readonly IMessenger _messenger;
+
+        private readonly Dictionary<Type, ViewModelBase> _viewModelCache = new();
+
         
 
-        public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService,ISessionService sessionService)
+
+        public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService,ISessionService sessionService, IMessenger messenger)
         {
             _serviceProvider = serviceProvider;
             _userService = userService;
             _sessionService = sessionService;
+
+            messenger.Register<MainWindowViewModel, UserMessage>(this, (MainWindowViewModel, message) =>
+            {
+                MainWindowViewModel._user = message.Value;
+                Console.WriteLine("MainWindowViewModel" + message.Value.email);
+            });
+            _messenger = messenger;
             _ = Initialize();
+            
         }
 
       
@@ -48,13 +66,23 @@ namespace AppoinmentScheduler.ViewModels
         partial void OnSelectedListItemChanged(ListItemTemplate? value)
         {
             if (value is null) return;
-            
-            // Use the service provider to create an instance of the ViewModel
-            var instance = _serviceProvider.GetRequiredService(value.ModelType) as ViewModelBase;
-            if (instance is null) return;
+
+            var viewModelType = value.ModelType;
+
+            // Check if instance already exists in cache
+            if (!_viewModelCache.TryGetValue(viewModelType, out var instance))
+            {
+                // Create and cache new instance if it doesn't exist
+                instance = _serviceProvider.GetRequiredService(viewModelType) as ViewModelBase;
+                if (instance is null) return;
+
+                _userService.SendData(_user);
+                _viewModelCache[viewModelType] = instance;
+            }
 
             CurrentPage = instance;
         }
+
 
         [RelayCommand] 
         private void TriggerPane()
@@ -67,44 +95,62 @@ namespace AppoinmentScheduler.ViewModels
             new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"),
             new ListItemTemplate(typeof(LoginPageViewModel), "ArrowRightRegular"),
             new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular")
-           // new ListItemTemplate(typeof(DashBoardViewModel), "HomeRegular")
         };
         
-        
-        // set the current page base on token
         public void SetCurrentPage(ViewModelBase viewModelBase){
+            _userService.SendData(_user);
             CurrentPage = viewModelBase;
+            
+            
         }
 
-        public void SetViewAsync(User user){
-            Console.WriteLine("SetViewAsync name");
-            Console.WriteLine(user.user_name);
+        public void SetView()
+        {
+            Items.Clear();
             
-            if(user.role == 1){//bussines
-                Items = new(){
-                    new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"),
-                };
+            if (_user.role == 1) // Business user
+            {
+                Console.WriteLine("Business");
+                Items.Add(new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ManagementViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ServiceViewModel), "HomeRegular"));
 
-                SetCurrentPage(new BusinessHomeViewModel( user));
+                
 
-            }else if(user.role == 0){
-                Items = new(){
-                    new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"),
-                };
-                SetCurrentPage(new ClientHomeViewModel(user));
+                if (!_viewModelCache.TryGetValue(typeof(BusinessHomeViewModel), out var businessInstance))
+                {
+                    businessInstance = _serviceProvider.GetRequiredService<BusinessHomeViewModel>();
+                    _viewModelCache[typeof(BusinessHomeViewModel)] = businessInstance;
+                }
+                SetCurrentPage(businessInstance);
             }
-         
-        
+            else if (_user.role == 0) // Client user
+            {
+                Console.WriteLine("ClientHomeViewModel");
+                Items.Add(new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"));
+
+                if (!_viewModelCache.TryGetValue(typeof(ClientHomeViewModel), out var clientInstance))
+                {
+                   var clientHomeViewModel = _serviceProvider.GetRequiredService<ClientHomeViewModel>();
+                    SetCurrentPage(clientHomeViewModel);
+                    _viewModelCache[typeof(ClientHomeViewModel)] = clientInstance;
+                }
+                SetCurrentPage(clientInstance);
+            }
             
-        } 
+            
+             
+           
+        }
+
         private async Task Initialize()
         {
-            if (await _sessionService.SessionLogin())
-            {
-                SetViewAsync(_sessionService.GetUser());
-                _userService.SetUser(_sessionService.GetUser());
-                //set imessager to send info 
-            }
+            if (await _sessionService.SessionLogin(_userService))
+            {  
+                SetView();
+            } 
         }
         
 
@@ -119,6 +165,7 @@ namespace AppoinmentScheduler.ViewModels
         {
             ModelType = type;
             Label = type.Name.Replace("PageViewModel", "");
+            Label = type.Name.Replace("ViewModel", "");
             App.Current!.TryFindResource(iconKey, out var res);
             ListItemIcon = (StreamGeometry)res!;
         }
@@ -127,5 +174,7 @@ namespace AppoinmentScheduler.ViewModels
         public string Label { get; }
         public StreamGeometry ListItemIcon { get; }
     }
+
+    
     
 }

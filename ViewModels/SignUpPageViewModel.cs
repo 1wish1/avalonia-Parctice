@@ -17,15 +17,13 @@ namespace AppoinmentScheduler.ViewModels
         private readonly MainWindowViewModel _mainWindowViewModel;
         private readonly IUserService _userService;
         private readonly ISessionService _sessionService;
-
-        private readonly IMessenger _messenger;//
-                        
-        public SignUpPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService, IMessenger messenger)
+        
+              
+        public SignUpPageViewModel(IUserService userService, MainWindowViewModel mainWindowViewModel, ISessionService SessionService)
         {   
             _mainWindowViewModel = mainWindowViewModel;
             _userService = userService;
             _sessionService = SessionService;       
-            _messenger = messenger;
         }
 
         [ObservableProperty] private string? _username;
@@ -33,6 +31,8 @@ namespace AppoinmentScheduler.ViewModels
         [ObservableProperty] private string? _email;
         [ObservableProperty] private string? _password;
         [ObservableProperty] private string? _error;
+        [ObservableProperty] private bool? _isBusiness;
+        [ObservableProperty] private bool? _isClient;
 
         [RelayCommand] 
         private async Task OnsubmitAsync()
@@ -59,10 +59,11 @@ namespace AppoinmentScheduler.ViewModels
                 email = Email, 
                 password = Password,
                 token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
-                role = 1
+                role = UserRole(),
             };
-            _ = _userService.AddUser(user, oAuthToken);
-            _mainWindowViewModel.SetViewAsync(_userService.getUser());
+            _userService.AddUser(user, oAuthToken);
+
+            _mainWindowViewModel.SetView();
             _ = LoadSplashAsync();
             
         }
@@ -125,5 +126,15 @@ namespace AppoinmentScheduler.ViewModels
             var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
         }
+        private int UserRole(){
+            if(_isBusiness is true) return 1;
+            return 0;
+        }
+
+
+   
+        
+
+
     }
 }
