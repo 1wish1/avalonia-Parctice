@@ -17,7 +17,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
              messenger.Register<ManagementViewModel, UserMessage>(this, (recipient, message) =>
             {
                 _user = message.Value;
-                _username = _user?.email;
+                _username = _user?.user_name;
                 Console.WriteLine("ManagementViewModel"+_username);
             });
              Console.WriteLine("ManagementViewModel"+_username);      

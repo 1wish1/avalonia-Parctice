@@ -26,15 +26,18 @@ namespace AppoinmentScheduler.ViewModels
         private readonly IUserService _userService;
 
         private readonly ISessionService _sessionService;
+        [ObservableProperty] private bool _isPaneOpen = true;
+
+        [ObservableProperty] private ViewModelBase _currentPage = new HomePageViewModel();
+
+        [ObservableProperty] private ListItemTemplate? _selectedListItem;
 
         private User _user { get; set; } 
 
-        private readonly IMessenger _messenger;
+
+      
 
         private readonly Dictionary<Type, ViewModelBase> _viewModelCache = new();
-
-        
-
 
         public MainWindowViewModel(IServiceProvider serviceProvider, IUserService userService,ISessionService sessionService, IMessenger messenger)
         {
@@ -45,41 +48,28 @@ namespace AppoinmentScheduler.ViewModels
             messenger.Register<MainWindowViewModel, UserMessage>(this, (MainWindowViewModel, message) =>
             {
                 MainWindowViewModel._user = message.Value;
-                Console.WriteLine("MainWindowViewModel" + message.Value.email);
+               Console.WriteLine("MainWindowViewModel");
             });
-            _messenger = messenger;
+           
             _ = Initialize();
-            
         }
 
-      
 
-        [ObservableProperty] 
-        private bool _isPaneOpen = true;
-
-        [ObservableProperty] 
-        private ViewModelBase _currentPage = new HomePageViewModel();
-
-        [ObservableProperty] 
-        private ListItemTemplate? _selectedListItem;
-
-        partial void OnSelectedListItemChanged(ListItemTemplate? value)
+        partial void OnSelectedListItemChanged(ListItemTemplate? value )
         {
             if (value is null) return;
-
+            
             var viewModelType = value.ModelType;
-
+            
             // Check if instance already exists in cache
             if (!_viewModelCache.TryGetValue(viewModelType, out var instance))
             {
                 // Create and cache new instance if it doesn't exist
                 instance = _serviceProvider.GetRequiredService(viewModelType) as ViewModelBase;
                 if (instance is null) return;
-
-                _userService.SendData(_user);
                 _viewModelCache[viewModelType] = instance;
             }
-
+            _userService.SendData(_user);
             CurrentPage = instance;
         }
 
@@ -100,8 +90,7 @@ namespace AppoinmentScheduler.ViewModels
         public void SetCurrentPage(ViewModelBase viewModelBase){
             _userService.SendData(_user);
             CurrentPage = viewModelBase;
-            
-            
+ 
         }
 
         public void SetView()
@@ -114,7 +103,7 @@ namespace AppoinmentScheduler.ViewModels
                 Items.Add(new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ManagementViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
-                Items.Add(new ListItemTemplate(typeof(ServiceViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
 
                 
 
@@ -133,16 +122,11 @@ namespace AppoinmentScheduler.ViewModels
 
                 if (!_viewModelCache.TryGetValue(typeof(ClientHomeViewModel), out var clientInstance))
                 {
-                   var clientHomeViewModel = _serviceProvider.GetRequiredService<ClientHomeViewModel>();
-                    SetCurrentPage(clientHomeViewModel);
+                    clientInstance = _serviceProvider.GetRequiredService<ClientHomeViewModel>();
                     _viewModelCache[typeof(ClientHomeViewModel)] = clientInstance;
                 }
                 SetCurrentPage(clientInstance);
             }
-            
-            
-             
-           
         }
 
         private async Task Initialize()
@@ -152,13 +136,22 @@ namespace AppoinmentScheduler.ViewModels
                 SetView();
             } 
         }
-        
+        public void UpdateView(){
+            
+            _userService.updateUser();
+             MessageView("done");     
+        }
+
+         public void MessageView(String Message){
+             SelectedListItem = null;
+             SetCurrentPage(new MessageViewModel(Message));
+         }
+
+
+
 
 
     }
-
-
-
     public class ListItemTemplate
     {
         public ListItemTemplate(Type type, string iconKey)

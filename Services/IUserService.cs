@@ -12,6 +12,7 @@ namespace AppoinmentScheduler.Services
         bool Login(string inputPassword, string inputEmail, string inputUserName);
         void SendData(User user);
         User? getUser();
+        void updateUser();
         
         
     }

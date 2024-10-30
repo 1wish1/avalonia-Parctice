@@ -9,6 +9,7 @@
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
         <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold"/>
+        <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
         
         
         <!-- Add more UI elements as needed -->

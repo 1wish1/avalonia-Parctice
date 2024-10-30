@@ -127,6 +127,7 @@ public partial class App : Application
         services.AddTransient<HomePageViewModel>();
         services.AddTransient<LoginPageViewModel>();
         services.AddTransient<SignUpPageViewModel>();
+        services.AddTransient<MessageViewModel>();
 
         // Register ViewModels Business
         services.AddSingleton<BusinessHomeViewModel>();
@@ -160,6 +161,7 @@ public partial class App : Application
         services.AddTransient<HomePageViewModel>();
         services.AddTransient<LoginPageViewModel>();
         services.AddTransient<SignUpPageViewModel>();
+        services.AddTransient<MessageViewModel>();
 
         // Register ViewModels Business
         services.AddSingleton<BusinessHomeViewModel>();

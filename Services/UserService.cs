@@ -85,6 +85,21 @@ namespace AppoinmentScheduler.Services
         {
             return _user;
         }
+        
+        public void updateUser(){
+           
+                string name = "johnkarltabuzo@gmail.com";
+                _context.Database.ExecuteSqlRaw("UPDATE Users SET user_name = {0} WHERE id = 9011", name);
+
+                // Re-query the user from the database without tracking to get the updated data
+                _user = _context.Users
+                    .FromSqlRaw("SELECT id, user_name, email, password, token, role FROM Users WHERE id = 9011")
+                    .AsNoTracking()
+                    .FirstOrDefault();
+
+                Console.WriteLine("updateUser: " + _user.user_name);
+                _messenger.Send(new UserMessage(_user));
+        }
 
 
         
