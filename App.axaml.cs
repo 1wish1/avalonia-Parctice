@@ -133,7 +133,7 @@ public partial class App : Application
         services.AddSingleton<BusinessHomeViewModel>();
         services.AddSingleton<ManagementViewModel>();
         services.AddSingleton<ProfileViewModel>();
-        services.AddSingleton<ServiceView>();
+        services.AddSingleton<ServiceViewModel>();
       
         
 
@@ -167,7 +167,7 @@ public partial class App : Application
         services.AddSingleton<BusinessHomeViewModel>();
         services.AddSingleton<ManagementViewModel>();
         services.AddSingleton<ProfileViewModel>();
-        services.AddSingleton<ServiceView>();
+        services.AddSingleton<ServiceViewModel>();
         
         // Register ViewModels Cleint
         services.AddTransient<ClientHomeViewModel>();

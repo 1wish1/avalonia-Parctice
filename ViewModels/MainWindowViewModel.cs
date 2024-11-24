@@ -45,11 +45,11 @@ namespace AppoinmentScheduler.ViewModels
             _userService = userService;
             _sessionService = sessionService;
 
-            messenger.Register<MainWindowViewModel, UserMessage>(this, (MainWindowViewModel, message) =>
+            messenger.Register<MainWindowViewModel, UserMessage>(this, (recipient, message) =>
             {
-                MainWindowViewModel._user = message.Value;
-               Console.WriteLine("MainWindowViewModel");
+                _user = message.Value;
             });
+            
            
             _ = Initialize();
         }
@@ -95,15 +95,16 @@ namespace AppoinmentScheduler.ViewModels
 
         public void SetView()
         {
-            Items.Clear();
+            
             
             if (_user.role == 1) // Business user
             {
+                Items.Clear();
                 Console.WriteLine("Business");
                 Items.Add(new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ManagementViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
-                Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ServiceViewModel), "HomeRegular"));
 
                 
 
@@ -116,6 +117,7 @@ namespace AppoinmentScheduler.ViewModels
             }
             else if (_user.role == 0) // Client user
             {
+                Items.Clear();
                 Console.WriteLine("ClientHomeViewModel");
                 Items.Add(new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"));
@@ -139,14 +141,10 @@ namespace AppoinmentScheduler.ViewModels
         public void UpdateView(){
             
             _userService.updateUser();
-             MessageView("done");     
+              
         }
 
-         public void MessageView(String Message){
-             SelectedListItem = null;
-             SetCurrentPage(new MessageViewModel(Message));
-         }
-
+       
 
 
 

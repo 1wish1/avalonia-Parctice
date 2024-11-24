@@ -61,10 +61,23 @@ namespace AppoinmentScheduler.ViewModels
                 token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
                 role = UserRole(),
             };
-            _userService.AddUser(user, oAuthToken);
-
-            _mainWindowViewModel.SetView();
-            _ = LoadSplashAsync();
+            try{
+                string validation = _userService.AddUser(user, oAuthToken);
+                if(validation == "done"){
+                    Console.WriteLine("asdasd");
+                    _mainWindowViewModel.SetView();
+                    _ = LoadSplashAsync();
+                }else{
+                    _ = LoadSplashAsync();
+                    Error = validation;
+                }
+            }catch(Exception e){
+                Console.WriteLine(e);
+                _ = LoadSplashAsync();
+                Error = "Connection denied" ;
+                return;
+            }
+    
             
         }
 

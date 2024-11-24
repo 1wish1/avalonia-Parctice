@@ -24,38 +24,43 @@ namespace AppoinmentScheduler.Services
             _sessionService = SessionService;
             _context = context;
             _messenger = messenger;
-
         }
      
-        public void AddUser(User user, OAuthToken oAuthToken)
-        {
-            user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
-            
-            _context.Users.Add(user);
-            _context.SaveChanges();
-            
-            User newUser = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE user_name = {0} and password = {1}", user.user_name, user.password).FirstOrDefault();
+        public String AddUser(User user, OAuthToken oAuthToken)
+        {   
+                user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
+                
+                User? userVerfiy = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE email = {0} or user_name = {1}", user.email, user.user_name).FirstOrDefault();
+                if(userVerfiy != null) return "Email or Name is ready use";
+                
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                
+                User newUser = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE user_name = {0} and password = {1} and email = {2}", user.user_name, user.password,user.email).FirstOrDefault();
+                if(newUser is null) return "Fail to Regester";
+                SendData(newUser);
 
-            if(newUser is null) return;
-            SendData(newUser);
+                oAuthToken.role = user.role;
 
-            oAuthToken.role = user.role;
+                oAuthToken.id = user.id;
 
-            oAuthToken.id = user.id;
-            
-            _ = _sessionService.SaveSessionAsync(oAuthToken);
+                _ = _sessionService.SaveSessionAsync(oAuthToken);
+                
+                return "done";
+                
         }
 
 
-        public bool Login(string inputPassword, string inputEmail, string inputUserName)
+        public String Login(string inputPassword, string inputEmail, string inputUserName)
         { 
+            
             var pulluser = _context.Users
             .FromSqlRaw("SELECT id, user_name, email, password, token, role FROM Users WHERE user_name = {0} AND email = {1}", inputUserName, inputEmail)
             .FirstOrDefault();
             if (pulluser == null ){
-                return false;
+                return "Fail no user found";
             }else if(!BCrypt.Net.BCrypt.Verify(inputPassword, pulluser.password)){
-                return false;
+                return "Incorect password";
             }else{
 
                 OAuthToken oAuthToken = new OAuthToken
@@ -74,7 +79,8 @@ namespace AppoinmentScheduler.Services
                 SendData(pulluser);
                 _ = _sessionService.SaveSessionAsync(oAuthToken); 
             }
-                return true;
+               
+                return "done";
         }
 
         public void SendData(User user)
@@ -88,7 +94,7 @@ namespace AppoinmentScheduler.Services
         
         public void updateUser(){
            
-                string name = "johnkarltabuzo@gmail.com";
+                string name = "johnkarltabuzoooo@gmail.com";
                 _context.Database.ExecuteSqlRaw("UPDATE Users SET user_name = {0} WHERE id = 9011", name);
 
                 // Re-query the user from the database without tracking to get the updated data
@@ -99,12 +105,9 @@ namespace AppoinmentScheduler.Services
 
                 Console.WriteLine("updateUser: " + _user.user_name);
                 _messenger.Send(new UserMessage(_user));
+                
         }
-
-
-        
     }
-
 }
 
 

@@ -16,8 +16,8 @@
       <Label Name="EmailLabel" Content="Email" />
       <TextBox Name="EmailTextBox" Text="{Binding Email, Mode=TwoWay}"/>
 
-      <Label Name="PasswordLabel" Content="Password"/>
-      <TextBox Name="PasswordTextBox"  Text="{Binding Password, Mode=TwoWay}"/>
+      <Label Name="PasswordLabel" Content="Password" />
+      <TextBox Name="PasswordTextBox"  Text="{Binding Password, Mode=TwoWay}" PasswordChar="*"/>
       
       <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
 

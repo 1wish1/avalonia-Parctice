@@ -1,7 +1,9 @@
 
 using System;
+
 using AppoinmentScheduler.ObjMessages;
 using AppoinmentScheduler.Services;
+
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -13,6 +15,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
     {
         [ObservableProperty] private string? _username;
         [ObservableProperty] private User? _user;
+       
         private IUserService _userService; 
         private readonly MainWindowViewModel _mainWindowViewModel;
         public BusinessHomeViewModel(IMessenger messenger, IUserService userService, MainWindowViewModel mainWindowViewModel)
@@ -21,7 +24,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             messenger.Register<BusinessHomeViewModel, UserMessage>(this, (recipient, message) =>
             {
                 _user = message.Value;
-                _username = _user?.user_name;
+                Username = _user?.user_name;
                 Console.WriteLine("BusinessHomeViewModel"+_username);
             });
              Console.WriteLine("BusinessHomeViewModel"+_username);      
@@ -33,6 +36,9 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
              
         }
         
+        
+        
     }
+    
 }
 

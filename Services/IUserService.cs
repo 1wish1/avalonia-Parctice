@@ -8,8 +8,8 @@ namespace AppoinmentScheduler.Services
 {
     public interface IUserService
     {
-        void AddUser(User user, OAuthToken oAuthToken);
-        bool Login(string inputPassword, string inputEmail, string inputUserName);
+        String AddUser(User user, OAuthToken oAuthToken);
+        String Login(string inputPassword, string inputEmail, string inputUserName);
         void SendData(User user);
         User? getUser();
         void updateUser();

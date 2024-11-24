@@ -6,10 +6,46 @@
              x:Class="AppoinmentScheduler.Views.BusinessViews.ServiceView"
              xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels" 
              x:DataType="vm:ServiceViewModel">
-
+ <ScrollViewer>
   <StackPanel Margin="20">
         <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
         <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold"/>
-  </StackPanel>          
+        
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="pink" BorderThickness="2">
+            <StackPanel>
+              <TextBlock Text="Name" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="Binding Name, Mode=TwoWay" Watermark="Business Name" FontSize="14"/>
+
+            <!-- Business Description -->
+            <TextBlock Text="Description" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="Binding Description, Mode=TwoWay" Watermark="Business Description" FontSize="14"/>
+
+            <!-- Contact Information -->
+            <TextBlock Text="Price:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="Binding Price, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+
+            <TextBlock Text="Duration:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="Binding Duration, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+
+            <TextBlock Text="Availability:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="Binding Availability, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+
+            <Button Name="submit"  Content="Submit"   Margin="0,10,300,0" Command="{Binding OnsubmitCommand}"/>
+              </StackPanel>
+      </Border>
+      <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2">
+          <WrapPanel Background="LightBlue" Width="200" Height="100">
+              <Button Width="200">Button 1</Button>
+              <Button>Button 2</Button>
+              <Button>Button 3</Button>
+              <Button>Button 4</Button>
+          </WrapPanel>
+      </Border>
+
+      
+
+
+  </StackPanel>
+  </ScrollViewer>          
   
 </UserControl>

@@ -5,14 +5,38 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AppoinmentScheduler.Views.BusinessViews.ManagementView"
              xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels" 
-             x:DataType="vm:ManagementViewModel"
-             >
+             x:DataType="vm:ManagementViewModel">
 
-  <StackPanel Margin="20">
-        <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
-        <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold"/>
-        
-        
-        <!-- Add more UI elements as needed -->
-    </StackPanel>
+   
+    <ScrollViewer>
+
+           
+            <Grid>
+                <!-- Welcome Section -->
+                <StackPanel Margin="20">
+                    <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold" TextAlignment="Center"/>
+                    <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold" TextAlignment="Center"/>
+                    <!-- Add more UI elements as needed -->
+                    <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Calendar x:Name="calendar" SelectionMode="MultipleRange"/>
+                            <TextBlock Margin="20" 
+                                Text="{Binding #calendar.SelectedDate}"/>
+                    </StackPanel>
+                    <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2">
+                        <WrapPanel Background="LightBlue" Width="200" Height="100">
+                            <Button Width="200">Button 1</Button>
+                            <Button>Button 2</Button>
+                            <Button>Button 3</Button>
+                            <Button>Button 4</Button>
+                        </WrapPanel>
+                    </Border>
+                </StackPanel>
+                
+
+                
+                
+
+            </Grid>
+     
+    </ScrollViewer>
 </UserControl>

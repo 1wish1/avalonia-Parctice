@@ -2,6 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AppoinmentScheduler.Services;
+using AppoinmentScheduler.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -20,18 +21,24 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
     [RelayCommand] private void Onsubmit()
         {
             Error = string.Empty;
-
+            try{
+            String validation = _userService.Login(Password, Email, Username);
             // Validate inputs
             if (!ValidateInputs())
             {
                 return; // Stop submission if validation fails
             }
-            if(_userService.Login(Password, Email, Username)){
+            
+            if(validation == "done"){
                 
                 _mainWindowViewModel.SetView();
                 
             }else{
+                Error = validation;
                 return;
+            }
+            }catch(Exception e){
+                Error = "Connnection Fail";
             }
              
         }
@@ -71,5 +78,32 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
         {
             var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, emailPattern);
+        }
+
+        private async Task LoadSplashAsync(){
+
+            //remove page
+            // load main viewmodel
+
+            var splashScreenVm = new SplashScreenViewModel();
+            var splashScreen = new SplashScreenView
+            {
+                DataContext = splashScreenVm
+            };
+            
+            splashScreen.Show();
+            try
+            {
+                splashScreenVm.StartupMessage = "Initailaizing Account...";
+                await Task.Delay(5000);
+                splashScreen.Close();
+            }
+            catch (TaskCanceledException)
+            {
+                //remove account 
+                // go back
+                splashScreen.Close();
+                
+            }
         }
 }

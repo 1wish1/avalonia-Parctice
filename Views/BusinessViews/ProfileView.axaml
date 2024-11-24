@@ -5,10 +5,42 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AppoinmentScheduler.Views.BusinessViews.ProfileView"
              xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels" 
-             x:DataType="vm:ProfileViewModel"
-             >
-   <StackPanel Margin="20">
-        <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
-        <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold"/>
-    </StackPanel>
+             x:DataType="vm:ProfileViewModel">
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold"/>
+
+            <!-- Business Name -->
+            <TextBlock Text="Business Name" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Business_Name, Mode=TwoWay}" Watermark="Business Name" FontSize="14"/>
+
+            <!-- Business Description -->
+            <TextBlock Text="Business Description" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Business_Description, Mode=TwoWay}" Watermark="Business Description" FontSize="14"/>
+
+            <!-- Contact Information -->
+            <TextBlock Text="Contact Information:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Contact_Information, Mode=TwoWay}" Watermark="Contact Information" FontSize="14"/>
+
+            <!-- Weekly Schedule -->
+            <TextBlock Text="Weekly Schedule:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Weekly_Schedule, Mode=TwoWay}" Watermark="Weekly Schedule" FontSize="14"/>
+
+            <!-- Time Slots -->
+            <TextBlock Text="Time Slots" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Time_Slots, Mode=TwoWay}" Watermark="Time Slots" FontSize="14"/>
+
+            <!-- Max Appointments -->
+            <TextBlock Text="Max Appointments" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Max_appointment, Mode=TwoWay}" Watermark="Max appointment" FontSize="14"/>
+
+            <!-- Cancellation Policy -->
+            <TextBlock Text="Cancellation Policy:" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Cancellation_Policy, Mode=TwoWay}" Watermark="Cancellation Policy" FontSize="14"/>
+            
+            <Button Name="submit"  Content="Submit"   Margin="0,10,300,0" Command="{Binding OnsubmitCommand}"/>
+        </StackPanel>
+        
+    </ScrollViewer>
 </UserControl>
