@@ -4,48 +4,51 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AppoinmentScheduler.Views.BusinessViews.ServiceView"
-             xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels" 
+             xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.BusinessViewModels"
              x:DataType="vm:ServiceViewModel">
- <ScrollViewer>
-  <StackPanel Margin="20">
-        <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
-        <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold"/>
-        
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="pink" BorderThickness="2">
-            <StackPanel>
-              <TextBlock Text="Name" FontSize="16" Margin="0,10,0,0"/>
-            <TextBox Text="Binding Name, Mode=TwoWay" Watermark="Business Name" FontSize="14"/>
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Greeting}" FontSize="24" FontWeight="Bold"/>
 
-            <!-- Business Description -->
-            <TextBlock Text="Description" FontSize="16" Margin="0,10,0,0"/>
-            <TextBox Text="Binding Description, Mode=TwoWay" Watermark="Business Description" FontSize="14"/>
+            <Border BorderBrush="Pink" BorderThickness="2" Margin="0,10,0,0">
+                <StackPanel>
+                    <TextBlock Text="Name" FontSize="16" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding Name, Mode=TwoWay}" Watermark="Business Name" FontSize="14"/>
 
-            <!-- Contact Information -->
-            <TextBlock Text="Price:" FontSize="16" Margin="0,10,0,0"/>
-            <TextBox Text="Binding Price, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+                    <TextBlock Text="Description" FontSize="16" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding Description, Mode=TwoWay}" Watermark="Business Description" FontSize="14"/>
 
-            <TextBlock Text="Duration:" FontSize="16" Margin="0,10,0,0"/>
-            <TextBox Text="Binding Duration, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+                    <TextBlock Text="Price:" FontSize="16" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding Price, Mode=TwoWay}" Watermark="Service Price" FontSize="14"/>
 
-            <TextBlock Text="Availability:" FontSize="16" Margin="0,10,0,0"/>
-            <TextBox Text="Binding Availability, Mode=TwoWay" Watermark="Contact Information" FontSize="14"/>
+                    <TextBlock Text="Duration:" FontSize="16" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding Duration, Mode=TwoWay}" Watermark="Service Duration" FontSize="14"/>
 
-            <Button Name="submit"  Content="Submit"   Margin="0,10,300,0" Command="{Binding OnsubmitCommand}"/>
-              </StackPanel>
-      </Border>
-      <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2">
-          <WrapPanel Background="LightBlue" Width="200" Height="100">
-              <Button Width="200">Button 1</Button>
-              <Button>Button 2</Button>
-              <Button>Button 3</Button>
-              <Button>Button 4</Button>
-          </WrapPanel>
-      </Border>
+                    <TextBlock Text="Availability:" FontSize="16" Margin="0,10,0,0"/>
+                    <TextBox Text="{Binding Availability, Mode=TwoWay}" Watermark="Service Availability" FontSize="14"/>
 
-      
+                    <Button Content="Add" Margin="0,10,0,0" Command="{Binding OnaddCommand}"/>
+                    <Button Content="Delete" Command="{Binding DeleteCommand}" />
+                    <Button Content="Edit" Command="{Binding EditCommand}" /> 
+                    
+                  
+                    <TextBlock Text="{Binding Error}" FontSize="16" Margin="0,10,0,0"/>
+                </StackPanel>
+            </Border>
+                    <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Blue"/>
+                                    <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/>                               
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
 
-  </StackPanel>
-  </ScrollViewer>          
-  
+            
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

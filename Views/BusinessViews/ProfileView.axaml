@@ -18,6 +18,12 @@
             <!-- Business Description -->
             <TextBlock Text="Business Description" FontSize="16" Margin="0,10,0,0"/>
             <TextBox Text="{Binding Business_Description, Mode=TwoWay}" Watermark="Business Description" FontSize="14"/>
+            
+            <TextBlock Text="Address" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Address, Mode=TwoWay}" Watermark="Business Description" FontSize="14"/>
+
+            <TextBlock Text="Organization or Office" FontSize="16" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding Organization_Office, Mode=TwoWay}" Watermark="Business Description" FontSize="14"/>
 
             <!-- Contact Information -->
             <TextBlock Text="Contact Information:" FontSize="16" Margin="0,10,0,0"/>
@@ -40,7 +46,9 @@
             <TextBox Text="{Binding Cancellation_Policy, Mode=TwoWay}" Watermark="Cancellation Policy" FontSize="14"/>
             
             <Button Name="submit"  Content="Submit"   Margin="0,10,300,0" Command="{Binding OnsubmitCommand}"/>
+            <TextBlock Text="{Binding Error}" FontSize="16" Margin="0,10,0,0"/>
         </StackPanel>
+        
         
     </ScrollViewer>
 </UserControl>

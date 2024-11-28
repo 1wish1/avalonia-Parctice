@@ -39,6 +39,11 @@ namespace AppoinmentScheduler.ViewModels
         {
             // Clear previous error
             Error = string.Empty;
+  
+            if(!_userService.CheckConnection()){
+                Error = "connection erro";
+                return;
+            }
 
             // Validate inputs
             if (!ValidateInputs())
@@ -61,22 +66,17 @@ namespace AppoinmentScheduler.ViewModels
                 token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken),
                 role = UserRole(),
             };
-            try{
+            
                 string validation = _userService.AddUser(user, oAuthToken);
                 if(validation == "done"){
                     Console.WriteLine("asdasd");
                     _mainWindowViewModel.SetView();
-                    _ = LoadSplashAsync();
+
                 }else{
-                    _ = LoadSplashAsync();
+                   
                     Error = validation;
                 }
-            }catch(Exception e){
-                Console.WriteLine(e);
-                _ = LoadSplashAsync();
-                Error = "Connection denied" ;
-                return;
-            }
+            
     
             
         }
@@ -110,28 +110,26 @@ namespace AppoinmentScheduler.ViewModels
 
         private bool ValidateInputs()
         {
-            // Validate Username
+
             if (string.IsNullOrWhiteSpace(Username) || Username.Length < 3)
             {
                 Error = "Username must be at least 3 characters long." ;
                 return false;
             }
 
-            // Validate Email
             if (string.IsNullOrWhiteSpace(Email) || !IsValidEmail(Email))
             {
                 Error = "Please enter a valid email address.";
                 return false;
             }
 
-            // Validate Password
             if (string.IsNullOrWhiteSpace(Password) || Password.Length < 6)
             {
                 Error = "Password must be at least 6 characters long.";
                 return false;
             }
 
-            return true; // All validations passed
+            return true; 
         }
 
         private bool IsValidEmail(string email)

@@ -9,5 +9,6 @@ public partial class ServiceView : UserControl
     public ServiceView()
     {
         InitializeComponent();
+        
     }
 }

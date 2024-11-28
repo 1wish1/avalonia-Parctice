@@ -20,8 +20,13 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
 
     [RelayCommand] private void Onsubmit()
         {
+
             Error = string.Empty;
-            try{
+            
+            if(!_userService.CheckConnection()){
+                Error = "connection erro";
+                return;
+            }
             String validation = _userService.Login(Password, Email, Username);
             // Validate inputs
             if (!ValidateInputs())
@@ -37,9 +42,7 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
                 Error = validation;
                 return;
             }
-            }catch(Exception e){
-                Error = "Connnection Fail";
-            }
+            
              
         }
 

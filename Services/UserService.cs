@@ -15,7 +15,7 @@ namespace AppoinmentScheduler.Services
     {
         private readonly AppDbContext _context;
         private readonly ISessionService _sessionService;
-        public User? _user { get; private set; }
+        private User? _user { get; set; }
 
         private readonly IMessenger _messenger;
 
@@ -30,13 +30,13 @@ namespace AppoinmentScheduler.Services
         {   
                 user.password = BCrypt.Net.BCrypt.HashPassword(user.password);
                 
-                User? userVerfiy = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE email = {0} or user_name = {1}", user.email, user.user_name).FirstOrDefault();
+                User? userVerfiy = _context.Users.FromSqlRaw(@"SELECT * FROM Users WHERE email = {0} or user_name = {1}", user.email, user.user_name).FirstOrDefault();
                 if(userVerfiy != null) return "Email or Name is ready use";
                 
                 _context.Users.Add(user);
                 _context.SaveChanges();
                 
-                User newUser = _context.Users.FromSqlRaw("SELECT * FROM Users WHERE user_name = {0} and password = {1} and email = {2}", user.user_name, user.password,user.email).FirstOrDefault();
+                User newUser = _context.Users.FromSqlRaw(@"SELECT * FROM Users WHERE user_name = {0} and password = {1} and email = {2}", user.user_name, user.password,user.email).FirstOrDefault();
                 if(newUser is null) return "Fail to Regester";
                 SendData(newUser);
 
@@ -55,7 +55,7 @@ namespace AppoinmentScheduler.Services
         { 
             
             var pulluser = _context.Users
-            .FromSqlRaw("SELECT id, user_name, email, password, token, role FROM Users WHERE user_name = {0} AND email = {1}", inputUserName, inputEmail)
+            .FromSqlRaw(@"SELECT id, user_name, email, password, token, role FROM Users WHERE user_name = {0} AND email = {1}", inputUserName, inputEmail)
             .FirstOrDefault();
             if (pulluser == null ){
                 return "Fail no user found";
@@ -72,7 +72,7 @@ namespace AppoinmentScheduler.Services
                     id = pulluser.id
                 };
 
-                _context.Database.ExecuteSqlRaw("UPDATE Users SET token = {0} WHERE user_name = {1} AND email = {2}", BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken), inputUserName, inputEmail);
+                _context.Database.ExecuteSqlRaw(@"UPDATE Users SET token = {0} WHERE user_name = {1} AND email = {2}", BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken), inputUserName, inputEmail);
             
                 pulluser.token = BCrypt.Net.BCrypt.HashPassword(oAuthToken.AccessToken);
 
@@ -107,6 +107,11 @@ namespace AppoinmentScheduler.Services
                 _messenger.Send(new UserMessage(_user));
                 
         }
+        public bool CheckConnection(){
+            return _context.CheckConnectionStatus();
+        }
+
+       
     }
 }
 

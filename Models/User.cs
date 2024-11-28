@@ -8,6 +8,9 @@ namespace Models
         public required string password { get; set; } 
         public required string token { get; set; } 
         public required int role { get; set; }
+        public BusinessAppointment BusinessAppointment { get; set; }
+
+        
     }    
 
     

@@ -55,7 +55,7 @@ public class SessionService : ISessionService
         if (!File.Exists(SessionFilePath)) return false;
         OAuthToken oAuthToken = await LoadSessionAsync();
         
-        User _user = await _context.Users.FromSqlRaw("SELECT * FROM Users WHERE id = {0}", oAuthToken.id).FirstOrDefaultAsync();
+        User _user = await _context.Users.FromSqlRaw(@"SELECT * FROM Users WHERE id = {0}", oAuthToken.id).FirstOrDefaultAsync();
 
         // Check if the token has expired
         DateTime issuedAt = oAuthToken.IssuedAt;

@@ -13,6 +13,9 @@ namespace AppoinmentScheduler.Services
         void SendData(User user);
         User? getUser();
         void updateUser();
+         public bool CheckConnection();
+
+      
         
         
     }
