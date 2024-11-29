@@ -59,9 +59,11 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
         [RelayCommand]
         private void Delete()
         {
-            Console.WriteLine(SelectedListItem.ServiceId);
-            _BSService.deleteService(SelectedListItem.ServiceId);
-            Items.Remove(SelectedListItem);
+            if (SelectedListItem != null){
+                _BSService.deleteService(SelectedListItem.ServiceId);
+                Items.Remove(SelectedListItem);
+            }
+            
         }
 
         
@@ -84,37 +86,43 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
 
 
 
-        private bool ValidateInputs()
-        {
-            if (string.IsNullOrWhiteSpace(Name) || Name.Length < 3)
-            {
-                Error = "Invalid Service Name" ;
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(Description) || Description.Length < 3)
-            {
-                Error = "Invalid Service Description" ;
-                return false;
-            }
-            if (Price < 0 || Price.GetType() != typeof(int) )
-            {
-                Error = "Invalid Service Price" ;
-                return false;
-            }
-            if (Duration < 0 || Duration.GetType() != typeof(int) )
-            {
-                Error = "Invalid Service Duration" ;
-                return false;
-            }
-            if (Availability < 0 || Availability.GetType() != typeof(int) )
-            {
-                Error = "Invalid Service Availability" ;
-                return false;
-            }
-            
-           
-            return true;
-        }
+       private bool ValidateInputs()
+{
+    if (string.IsNullOrWhiteSpace(Name) || Name.Length < 3)
+    {
+        Error = "Invalid Service Name";
+        return false;
+    }
+    if (string.IsNullOrWhiteSpace(Description) || Description.Length < 3)
+    {
+        Error = "Invalid Service Description";
+        return false;
+    }
+    
+    // Ensure Price is not null and >= 0
+    if (!Price.HasValue || Price.Value < 0)
+    {
+        Error = "Invalid Service Price";
+        return false;
+    }
+    
+    // Ensure Duration is not null and >= 0
+    if (!Duration.HasValue || Duration.Value < 0)
+    {
+        Error = "Invalid Service Duration";
+        return false;
+    }
+    
+    // Ensure Availability is not null and >= 0
+    if (!Availability.HasValue || Availability.Value < 0)
+    {
+        Error = "Invalid Service Availability";
+        return false;
+    }
+
+    return true;
+}
+
 
     }
 

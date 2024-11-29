@@ -141,7 +141,9 @@ public partial class App : Application
         
 
         // Register ViewModels Cleint
-         services.AddSingleton<ClientHomeViewModel>();
+        services.AddTransient<ClientHomeViewModel>();
+        services.AddTransient<ClientBookingViewModel>();
+        services.AddTransient<ClientAppoinmentViewModel>();
      
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
@@ -155,7 +157,7 @@ public partial class App : Application
         // Register services
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IBusinessServices, BusinessServices>();
-         services.AddSingleton<IBSService, BSService>();
+        services.AddSingleton<IBSService, BSService>();
         
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
@@ -177,6 +179,8 @@ public partial class App : Application
         
         // Register ViewModels Cleint
         services.AddTransient<ClientHomeViewModel>();
+        services.AddTransient<ClientBookingViewModel>();
+        services.AddTransient<ClientAppoinmentViewModel>();
       
         // Register Messenger
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);

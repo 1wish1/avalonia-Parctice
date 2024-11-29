@@ -1,3 +1,4 @@
+using AppoinmentScheduler.ViewModels.ClientViewModels;
 using Avalonia.Controls;
 
 namespace AppoinmentScheduler.Views.ClientViews
@@ -8,5 +9,10 @@ namespace AppoinmentScheduler.Views.ClientViews
         {
             InitializeComponent();
         }
+
+
+    
+
+
     }
 }

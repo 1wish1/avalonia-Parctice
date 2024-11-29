@@ -1,6 +1,7 @@
+using System;
 namespace Models
 {
-    public class User
+    public class User 
     {
         public int id { get; set; } 
         public required string? user_name { get; set; }
@@ -10,7 +11,6 @@ namespace Models
         public required int role { get; set; }
         public BusinessAppointment BusinessAppointment { get; set; }
 
-        
     }    
 
     

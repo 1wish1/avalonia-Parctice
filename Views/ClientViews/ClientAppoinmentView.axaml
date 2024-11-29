@@ -1,0 +1,14 @@
+<avalonia:UserControl xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:avalonia="https://github.com/avaloniaui"
+
+                     x:Class="AppoinmentScheduler.Views.ClientViews.ClientAppoinmentView"
+                     xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.ClientViewModels" 
+                     x:DataType="vm:ClientAppoinmentViewModel"
+                     >
+                     
+    <StackPanel Margin="20">
+        <TextBlock Text="Welcome to Client Home" FontSize="24" FontWeight="Bold"/>
+        
+    </StackPanel>
+</avalonia:UserControl>

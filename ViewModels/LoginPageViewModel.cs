@@ -35,7 +35,7 @@ public partial class LoginPageViewModel(IUserService userService, MainWindowView
             }
             
             if(validation == "done"){
-                
+                _mainWindowViewModel.IsLoggedIn = true;
                 _mainWindowViewModel.SetView();
                 
             }else{

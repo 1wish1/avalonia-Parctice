@@ -98,7 +98,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             {
                 Error = "Invalid Time Slots" ;
                 return false;
-            }if (Max_appointment < 0 )
+            }if (!Max_appointment.HasValue || Max_appointment.Value < 0)
             {
                 Error = "Invalid Max Appointments" ;
                 return false;

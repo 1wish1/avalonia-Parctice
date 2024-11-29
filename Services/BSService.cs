@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using AppoinmentScheduler.ObjMessages;
 using CommunityToolkit.Mvvm.Messaging;
 using Data;
@@ -98,5 +99,28 @@ namespace AppoinmentScheduler.Services
                 .FirstOrDefault();
             return service;
         }
+
+    public async Task<List<BusinessService>> GetItemsAsync(int page, int pageSize)
+    {
+        // Fetch items from the database with pagination
+        var items = await _context.BusinessService
+            .OrderBy(b => b.ServiceId)  // Order by a relevant field, e.g., ServiceId
+            .Skip(page * pageSize)      // Skip the number of items based on the page
+            .Take(pageSize)             // Take the page size amount of items
+            .ToListAsync();             // Execute the query and convert it to a list
+
+        return items;
+    }
+
+        public async Task<List<BusinessService>> SearchItemsAsync(string searchText)
+        {
+            // Query the database using EF Core with a LINQ query
+            var services = await _context.BusinessService
+                .Where(bs => bs.Name.Contains(searchText))
+                .ToListAsync();
+
+            return services;
+        }
+
     }
 }

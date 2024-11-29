@@ -26,7 +26,7 @@
                     <TextBox Text="{Binding Duration, Mode=TwoWay}" Watermark="Service Duration" FontSize="14"/>
 
                     <TextBlock Text="Availability:" FontSize="16" Margin="0,10,0,0"/>
-                    <TextBox Text="{Binding Availability, Mode=TwoWay}" Watermark="Service Availability" FontSize="14"/>
+                    <TextBox Text="{Binding Availability , Mode=TwoWay, }"  Watermark="Service Availability" FontSize="14"/>
 
                     <Button Content="Add" Margin="0,10,0,0" Command="{Binding OnaddCommand}"/>
                     <Button Content="Delete" Command="{Binding DeleteCommand}" />
@@ -46,9 +46,6 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
-
-            
         </StackPanel>
     </ScrollViewer>
 </UserControl>

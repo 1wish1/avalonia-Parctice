@@ -32,6 +32,8 @@ namespace AppoinmentScheduler.ViewModels
 
         [ObservableProperty] private ListItemTemplate? _selectedListItem;
 
+        [ObservableProperty] private bool _isLoggedIn;
+
         private User _user { get; set; } 
 
 
@@ -52,6 +54,7 @@ namespace AppoinmentScheduler.ViewModels
             
            
             _ = Initialize();
+            _isLoggedIn = false;
         }
 
 
@@ -96,7 +99,7 @@ namespace AppoinmentScheduler.ViewModels
         public void SetView()
         {
             
-            
+            IsLoggedIn = true;
             if (_user.role == 1) // Business user
             {
                 Items.Clear();
@@ -113,6 +116,7 @@ namespace AppoinmentScheduler.ViewModels
                     businessInstance = _serviceProvider.GetRequiredService<BusinessHomeViewModel>();
                     _viewModelCache[typeof(BusinessHomeViewModel)] = businessInstance;
                 }
+                
                 SetCurrentPage(businessInstance);
             }
             else if (_user.role == 0) // Client user
@@ -120,13 +124,16 @@ namespace AppoinmentScheduler.ViewModels
                 Items.Clear();
                 Console.WriteLine("ClientHomeViewModel");
                 Items.Add(new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"));
-                Items.Add(new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ClientAppoinmentViewModel), "HomeRegular"));
+                Items.Add(new ListItemTemplate(typeof(ClientBookingViewModel), "HomeRegular"));
+                
 
                 if (!_viewModelCache.TryGetValue(typeof(ClientHomeViewModel), out var clientInstance))
                 {
                     clientInstance = _serviceProvider.GetRequiredService<ClientHomeViewModel>();
                     _viewModelCache[typeof(ClientHomeViewModel)] = clientInstance;
                 }
+                
                 SetCurrentPage(clientInstance);
             }
         }
@@ -142,6 +149,19 @@ namespace AppoinmentScheduler.ViewModels
             
             _userService.updateUser();
               
+        }
+        [RelayCommand] 
+        private void Logout()
+        {
+            _sessionService.SessionLogout();
+            IsLoggedIn = false;
+            Items.Clear();
+            Items.Add( new ListItemTemplate(typeof(HomePageViewModel), "HomeRegular"));
+            Items.Add(new ListItemTemplate(typeof(LoginPageViewModel), "ArrowRightRegular"));
+            Items.Add(new ListItemTemplate(typeof(SignUpPageViewModel), "HomeRegular"));
+            
+            SetCurrentPage(new HomePageViewModel());
+            
         }
 
        

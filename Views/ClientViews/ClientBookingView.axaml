@@ -1,0 +1,47 @@
+<avalonia:UserControl xmlns="https://github.com/avaloniaui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                     xmlns:avalonia="https://github.com/avaloniaui"
+                     x:Class="AppoinmentScheduler.Views.ClientViews.ClientBookingView"
+                     xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.ClientViewModels"
+                     x:DataType="vm:ClientBookingViewModel">
+
+    <StackPanel Margin="20">
+        <TextBlock Text="Welcome to Client Home" FontSize="24" FontWeight="Bold"/>
+        
+        <CalendarDatePicker SelectedDateFormat="Custom" CustomDateFormatString="yyyy-MM-dd" />
+        <TextBox Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
+        
+        <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
+            <Button Content="Add" />
+            <Button Content="Delete" />
+            <Button Content="Edit" />
+        </StackPanel>
+
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                        Watermark="Search for Service...." 
+                        Width="300" />
+                <Button Content="Search" Command="{Binding SearchCommand}" Margin="5,0,0,0" />
+            </StackPanel>
+        </DockPanel>
+
+        <!-- ScrollViewer wrapping ListBox -->
+        <ScrollViewer ScrollChanged="OnScrollChanged" VerticalScrollBarVisibility="Auto">
+            <ListBox ItemsSource="{Binding Items}" 
+                    SelectedItem="{Binding SelectedListItem}" 
+                    Margin="0,20,0,0">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="5">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Blue"/>
+                            <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
+
+    </StackPanel>
+</avalonia:UserControl>
