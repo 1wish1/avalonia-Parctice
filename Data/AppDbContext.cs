@@ -10,6 +10,7 @@ namespace Data
         public DbSet<User> Users { get; set; }
         public DbSet<BusinessAppointment> BusinessAppointment { get; set; }
         public DbSet<BusinessService> BusinessService { get; set; }
+        public DbSet<ClientAppointment> ClientAppointment { get; set; }
         
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)   
@@ -26,6 +27,8 @@ namespace Data
 
             modelBuilder.Entity<BusinessService>()
                 .HasKey(s => s.ServiceId);
+            modelBuilder.Entity<ClientAppointment>()
+                .HasKey(c => c.ClientAppointment_ID);
 
 
             modelBuilder.Entity<BusinessService>()

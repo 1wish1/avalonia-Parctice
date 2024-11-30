@@ -76,19 +76,27 @@ namespace AppoinmentScheduler.Services
      
         public Collection<BusinessService> Selectall()
         {   
-            
-            var services = _context.BusinessService
-            .FromSqlRaw(@"SELECT DISTINCT bs.*
-            FROM BusinessService bs
-            INNER JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
-            INNER JOIN Users u ON ba.Business_Account = u.id
-            WHERE u.id = {0};", _user.id)
-            .ToList();
-            if (services == null){
-                return new Collection<BusinessService>();
-            }else{
-                return new Collection<BusinessService>(services);
+            try
+            {
+                var services = _context.BusinessService
+                .FromSqlRaw(@"SELECT DISTINCT bs.*
+                FROM BusinessService bs
+                INNER JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
+                INNER JOIN Users u ON ba.Business_Account = u.id
+                WHERE u.id = {0};", _user.id)
+                .ToList();
+                if (services == null){
+                    return new Collection<BusinessService>();
+                }else{
+                    return new Collection<BusinessService>(services);
+                }    
             }
+            catch (Exception e)
+            {
+
+                return new Collection<BusinessService>();
+            }
+            
             
         }
 

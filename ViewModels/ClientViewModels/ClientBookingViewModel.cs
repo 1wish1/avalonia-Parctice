@@ -35,12 +35,27 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
     }
 
     private readonly IBSService _BSService;
+    private readonly IClientService _ClientService;
 
-    public ClientBookingViewModel(IBSService BSService)
+    private User? _user { get; set; }
+
+   [ObservableProperty] private DateTime _selectedDate;
+   
+   [ObservableProperty] private string _description;
+                    
+
+    public ClientBookingViewModel(IClientService clientService,IBSService BSService,IMessenger messenger)
     {
+        messenger.Register<ClientBookingViewModel, UserMessage>(this, (recipient, message) =>
+        {
+            _user = message.Value;
+        });
+        
         Items = new ObservableCollection<BusinessService>();
         _BSService = BSService;
-        LoadItems();
+        _ClientService = clientService;
+        
+        
     }
 
     [ObservableProperty] private string _searchText;
@@ -95,6 +110,31 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             _currentPage = 0; // Reset page number for a fresh load
             await LoadItems();
         }
+    }
+
+
+
+
+
+
+
+
+    [RelayCommand]  public async Task AddAsync(){
+        ClientAppointment clientAppointment = new ClientAppointment(){
+            Client_Account = _user.id,
+            ServiceID = SelectedListItem.ServiceId,
+            Time_Date = SelectedDate,
+            Status = "pending",
+            Description = Description
+        };
+        _ClientService.insert(clientAppointment);
+    }
+    [RelayCommand]  public async Task DeleteAsync(){
+        Console.WriteLine("asdasdasd");
+
+    }
+    [RelayCommand]  public async Task EditAsync(){
+        Console.WriteLine("asdasdasd");
     }
 
 

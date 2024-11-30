@@ -8,13 +8,13 @@
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Client Home" FontSize="24" FontWeight="Bold"/>
         
-        <CalendarDatePicker SelectedDateFormat="Custom" CustomDateFormatString="yyyy-MM-dd" />
-        <TextBox Height="100" AcceptsReturn="True" TextWrapping="Wrap"/>
+        <CalendarDatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}" SelectedDateFormat="Custom" CustomDateFormatString="yyyy-MM-dd" />
+        <TextBox Text="{Binding Description, Mode=TwoWay}" Height="100" AcceptsReturn="True" TextWrapping="Wrap" />
         
         <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
-            <Button Content="Add" />
-            <Button Content="Delete" />
-            <Button Content="Edit" />
+            <Button Content="Add"  Command= "{Binding AddCommand}" />
+            <Button Content="Delete" Command= "{Binding DeleteCommand}" />
+            <Button Content="Edit" Command= "{Binding EditCommand}" />
         </StackPanel>
 
         <DockPanel>

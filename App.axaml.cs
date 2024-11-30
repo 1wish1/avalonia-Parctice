@@ -158,6 +158,8 @@ public partial class App : Application
         services.AddSingleton<IUserService, UserService>();
         services.AddSingleton<IBusinessServices, BusinessServices>();
         services.AddSingleton<IBSService, BSService>();
+        services.AddSingleton<IClientService, ClientService>();
+
         
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer("Server=localhost;Database=AppoinmentScheduler;User Id=sa;Password=KarlPogi5758;Encrypt=True;TrustServerCertificate=True;"));
