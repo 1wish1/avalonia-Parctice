@@ -40,7 +40,7 @@
             Width="500">
             
         <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Calendar x:Name="calendar" SelectionMode="MultipleRange"/>
+            <Calendar x:Name="calendar" SelectionMode="MultipleRange" />
                 <TextBlock Margin="20" 
                     Text="{Binding #calendar.SelectedDate}"/>
         </StackPanel>

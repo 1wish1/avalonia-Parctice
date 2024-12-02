@@ -27,6 +27,7 @@ namespace Data
 
             modelBuilder.Entity<BusinessService>()
                 .HasKey(s => s.ServiceId);
+    
             modelBuilder.Entity<ClientAppointment>()
                 .HasKey(c => c.ClientAppointment_ID);
 

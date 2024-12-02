@@ -15,47 +15,35 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
     public partial class ClientBookingViewModel : ViewModelBase
     {
 
-    private ObservableCollection<BusinessService> _items;
-    private bool _isLoading;
-    private int _pageSize = 20;
-    private int _currentPage = 0;
+    [ObservableProperty] private ObservableCollection<BusinessService> _items;
+    [ObservableProperty] private bool _isLoading;
 
     [ObservableProperty] private BusinessService? _selectedListItem;
-
-    public ObservableCollection<BusinessService> Items
-    {
-        get => _items;
-        set => SetProperty(ref _items, value);
-    }
-
-    public bool IsLoading
-    {
-        get => _isLoading;
-        set => SetProperty(ref _isLoading, value);
-    }
-
-    private readonly IBSService _BSService;
-    private readonly IClientService _ClientService;
-
-    private User? _user { get; set; }
 
    [ObservableProperty] private DateTime _selectedDate;
    
    [ObservableProperty] private string _description;
+
+   [ObservableProperty] private string _error;
+    private readonly IClientService _ClientService;
+
+    private User? _user { get; set; }
+    private int _pageSize = 20;
+    private int _currentPage = 0;
+
                     
 
-    public ClientBookingViewModel(IClientService clientService,IBSService BSService,IMessenger messenger)
+    public ClientBookingViewModel(IClientService clientService,IMessenger messenger)
     {
         messenger.Register<ClientBookingViewModel, UserMessage>(this, (recipient, message) =>
         {
             _user = message.Value;
+            SearchAsync();
         });
         
         Items = new ObservableCollection<BusinessService>();
-        _BSService = BSService;
         _ClientService = clientService;
-        
-        
+        SelectedDate = DateTime.Today;
     }
 
     [ObservableProperty] private string _searchText;
@@ -67,16 +55,16 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
         IsLoading = true;
 
-        // Simulate fetching items in chunks from the database
-        var fetchedItems = await _BSService.GetItemsAsync(_currentPage, _pageSize);
+        // pagenation 
+        var fetchedItems = await _ClientService.GetItemsAsync(_currentPage, _pageSize);
 
         if (fetchedItems != null && fetchedItems.Any())
         {
-            // Randomize the order of items
+            // Item random 
             var random = new Random();
             fetchedItems = fetchedItems.OrderBy(x => random.Next()).ToList();
 
-            // Add the fetched items to the existing collection
+            // Add item to the collection 
             foreach (var item in fetchedItems)
             {
                 Items.Add(item);
@@ -95,7 +83,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             // If there is search text, fetch the filtered items
-            var filteredItems = await _BSService.SearchItemsAsync(SearchText);
+            var filteredItems = await _ClientService.SearchItemsAsync(SearchText);
 
             // Clear current items and add the filtered results
             Items.Clear();
@@ -115,27 +103,52 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
 
 
+    private bool CanAdd()
+    {
+            if(string.IsNullOrWhiteSpace(Description)){
+                Error = "Must Have Description";
+                return false;
+            }
+            if(SelectedDate.Date < DateTime.Today){
+                Error = "Must be Tomorrow or Today";
+                return false;
+            }
+            if(SelectedListItem == null){
+                Error = "Select Service";
+                return false;
+            }
+
+       return true;
+    }
+
+
+
+
 
 
 
 
     [RelayCommand]  public async Task AddAsync(){
-        ClientAppointment clientAppointment = new ClientAppointment(){
-            Client_Account = _user.id,
-            ServiceID = SelectedListItem.ServiceId,
-            Time_Date = SelectedDate,
-            Status = "pending",
-            Description = Description
-        };
-        _ClientService.insert(clientAppointment);
-    }
-    [RelayCommand]  public async Task DeleteAsync(){
-        Console.WriteLine("asdasdasd");
+        if (!CanAdd()){
+            return;
+        }
+        try{
 
+        
+            ClientAppointment clientAppointment = new ClientAppointment(){
+                Userid = _user.id,
+                ServiceID = SelectedListItem.ServiceId,
+                Time_Date = SelectedDate,
+                Status = "pending",
+                Description = Description
+            };
+            _ClientService.insert(clientAppointment);
+        }
+        catch(Exception e){
+            Error = "Pls add your input";
+        }
     }
-    [RelayCommand]  public async Task EditAsync(){
-        Console.WriteLine("asdasdasd");
-    }
+
 
 
     

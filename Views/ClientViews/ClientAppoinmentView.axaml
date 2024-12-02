@@ -1,14 +1,39 @@
 <avalonia:UserControl xmlns="https://github.com/avaloniaui"
                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                      xmlns:avalonia="https://github.com/avaloniaui"
-
                      x:Class="AppoinmentScheduler.Views.ClientViews.ClientAppoinmentView"
                      xmlns:vm="clr-namespace:AppoinmentScheduler.ViewModels.ClientViewModels" 
-                     x:DataType="vm:ClientAppoinmentViewModel"
-                     >
-                     
+                     x:DataType="vm:ClientAppoinmentViewModel">
+    <ScrollViewer>
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Client Home" FontSize="24" FontWeight="Bold"/>
-        
+
+<StackPanel Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Calendar x:Name="calendar"
+              SelectionMode="SingleDate"
+              SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
+    <TextBlock Margin="20" 
+               Text="{Binding SelectedDate, StringFormat='Selected Date: {0:MM/dd/yyyy}'}" />
+</StackPanel>
+     
+        <!-- Buttons in horizontal orientation -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+            <Button Content="Edit" Command="{Binding EditCommand}" Width="100"/>
+            <Button Content="Delete" Command="{Binding DeleteCommand}" Width="100"/>
+        </StackPanel>
+
+<ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
+    <ListBox.ItemTemplate>
+        <DataTemplate>
+            <StackPanel Margin="5">
+                <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
+                <TextBlock Text="{Binding ServiceID}" FontStyle="Italic" Foreground="Blue"/>                              
+            </StackPanel>
+        </DataTemplate>
+    </ListBox.ItemTemplate>
+</ListBox>
+
     </StackPanel>
+
+    </ScrollViewer>
 </avalonia:UserControl>

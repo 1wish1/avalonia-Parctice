@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using AppoinmentScheduler.ObjMessages;
+using AppoinmentScheduler.ViewModels.ClientViewModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Data;
 using Microsoft.EntityFrameworkCore;
@@ -99,6 +100,28 @@ namespace AppoinmentScheduler.Services
             
             
         }
+        public Collection<ClientAppointment> Selectall(int user_id)
+        {   
+            try
+            {
+                var services = _context.ClientAppointment
+                .FromSqlRaw(@"SELECT * from ClientAppointment WHERE Client_Account = {0};",_user.id)
+                .ToList();
+                if (services == null){
+                    return new Collection<ClientAppointment>();
+                }else{
+                    return new Collection<ClientAppointment>(services);
+                }    
+            }
+            catch (Exception e)
+            {
+
+                return new Collection<ClientAppointment>();
+            }
+            
+            
+        }
+
 
         public BusinessService Select(int id)
         {
@@ -108,27 +131,9 @@ namespace AppoinmentScheduler.Services
             return service;
         }
 
-    public async Task<List<BusinessService>> GetItemsAsync(int page, int pageSize)
-    {
-        // Fetch items from the database with pagination
-        var items = await _context.BusinessService
-            .OrderBy(b => b.ServiceId)  // Order by a relevant field, e.g., ServiceId
-            .Skip(page * pageSize)      // Skip the number of items based on the page
-            .Take(pageSize)             // Take the page size amount of items
-            .ToListAsync();             // Execute the query and convert it to a list
+       
 
-        return items;
-    }
-
-        public async Task<List<BusinessService>> SearchItemsAsync(string searchText)
-        {
-            // Query the database using EF Core with a LINQ query
-            var services = await _context.BusinessService
-                .Where(bs => bs.Name.Contains(searchText))
-                .ToListAsync();
-
-            return services;
-        }
+        
 
     }
 }

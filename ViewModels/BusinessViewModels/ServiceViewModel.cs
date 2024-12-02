@@ -36,6 +36,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
                 Items = new ObservableCollection<BusinessService>(_BSService.Selectall());
             });
             _BSService = BSService;
+            Items = new ObservableCollection<BusinessService>();
         }
 
         [RelayCommand]

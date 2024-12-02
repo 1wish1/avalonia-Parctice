@@ -1,3 +1,5 @@
+using System;
+using Avalonia;
 using Avalonia.Controls;
 
 namespace AppoinmentScheduler.Views.ClientViews
@@ -7,6 +9,11 @@ namespace AppoinmentScheduler.Views.ClientViews
         public ClientAppoinmentView()
         {
             InitializeComponent();
+           
+            
+        }
+        public void click(){
+             Console.WriteLine(calendar.SelectedDate);
         }
     }
 }
