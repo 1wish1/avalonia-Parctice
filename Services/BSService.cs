@@ -42,7 +42,10 @@ namespace AppoinmentScheduler.Services
 
         public void deleteService(int id)
         {
-            // Find the service with the given ID
+             _context.Database.ExecuteSqlRaw(
+                "DELETE FROM ClientAppointment WHERE ServiceID = {0}",
+                id
+                );
             var service = _context.BusinessService
                 .Include(bs => bs.businessAppointment) // Include the navigation property
                 .FirstOrDefault(bs => bs.ServiceId == id);

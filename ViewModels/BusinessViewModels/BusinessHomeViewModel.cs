@@ -1,6 +1,6 @@
 
 using System;
-
+using System.Collections.ObjectModel;
 using AppoinmentScheduler.ObjMessages;
 using AppoinmentScheduler.Services;
 
@@ -15,26 +15,26 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
     {
         [ObservableProperty] private string? _username;
         [ObservableProperty] private User? _user;
+
+        [ObservableProperty] private ObservableCollection<BusinessSubcriber> _items = new();
+
+        [ObservableProperty] private BusinessSubcriber? _selectedListItem;
+
+        private readonly IClientService _clientService;
        
-        private IUserService _userService; 
-        private readonly MainWindowViewModel _mainWindowViewModel;
-        public BusinessHomeViewModel(IMessenger messenger, IUserService userService, MainWindowViewModel mainWindowViewModel)
+
+        public BusinessHomeViewModel(IMessenger messenger, IClientService clientService)
         {
-            _mainWindowViewModel = mainWindowViewModel;
+            _clientService =clientService;
             messenger.Register<BusinessHomeViewModel, UserMessage>(this, (recipient, message) =>
             {
                 _user = message.Value;
-                Username = _user?.user_name;
-                Console.WriteLine("BusinessHomeViewModel"+_username);
+                Items = new ObservableCollection<BusinessSubcriber>(_clientService.SelectallBS(_user.id));
             });
-             Console.WriteLine("BusinessHomeViewModel"+_username);      
-             _userService = userService;
-        }
-        [RelayCommand] private void Onsubmit()
-        {
-            _mainWindowViewModel.UpdateView();
+            Items = new ObservableCollection<BusinessSubcriber>();
              
         }
+        
         
         
         

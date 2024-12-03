@@ -54,12 +54,6 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             };
 
             _businessServices.addBusinessService(businessAppointment);
-           
-
-
-
-
-
         }
 
         private bool ValidateInputs()

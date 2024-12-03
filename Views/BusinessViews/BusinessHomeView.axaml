@@ -9,8 +9,7 @@
     <ScrollViewer>
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
-        <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold"/>
-        <Button Name="submit" Command="{Binding OnsubmitCommand}" Content="Submit"  />
+       
     <DockPanel HorizontalAlignment="Center" >
         <Border Width="300" Height="150" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left" Margin="0,0,100,0">
             <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
@@ -32,19 +31,17 @@
             number
         </TextBlock>
     </Canvas>
+<ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
+    <ListBox.ItemTemplate>
+        <DataTemplate>
+            <StackPanel Margin="5">
+                <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
+                <TextBlock Text="{Binding ClientEmail}" FontStyle="Italic" Foreground="Blue"/>                              
+            </StackPanel>
+        </DataTemplate>
+    </ListBox.ItemTemplate>
+</ListBox>
     
-    <Border Background="LightBlue"
-            BorderBrush="Black"
-            BorderThickness="2"
-            Padding="15"
-            Width="500">
-            
-        <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Calendar x:Name="calendar" SelectionMode="MultipleRange" />
-                <TextBlock Margin="20" 
-                    Text="{Binding #calendar.SelectedDate}"/>
-        </StackPanel>
-    </Border>
     
         
         <!-- Add more UI elements as needed -->

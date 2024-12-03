@@ -12,17 +12,14 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 {
     public partial class ClientAppoinmentViewModel : ViewModelBase
     {
-        [ObservableProperty]
-        private User? _user;
+        [ObservableProperty] private User? _user;
 
-        [ObservableProperty]
-        private ObservableCollection<ClientAppointment> _items = new();
+        [ObservableProperty] private ObservableCollection<ClientAppointment> _items = new();
 
-        [ObservableProperty]
-        private ClientAppointment? _selectedListItem;
+        [ObservableProperty] private ClientAppointment? _selectedListItem;
 
-        [ObservableProperty]
-        private DateTime? _selectedDate;
+        [ObservableProperty] private DateTime? _selectedDate;
+        [ObservableProperty] private string? _error;
 
         private readonly IClientService _clientService;
 
@@ -32,26 +29,47 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
             messenger.Register<ClientAppoinmentViewModel, UserMessage>(this, (recipient, message) =>
             {
-                User = message.Value;
+                _user = message.Value;
+                
             });
+          
+            
         }
 
         partial void OnSelectedDateChanged(DateTime? value)
         {
-            // This method is automatically called when SelectedDate changes.
-            Console.WriteLine($"Selected Date: {value:MM/dd/yyyy}");
+            LoadItem(value);
+        }
+        public void LoadItem(DateTime? value){
+            var filteredItems = _clientService.SearchBydateAsync(value.Value.ToString("yyyy-MM-dd HH:mm:ss.fff"),_user.id);
+
+            Items.Clear();
+            foreach (var item in filteredItems)
+            {
+                Items.Add(item);
+            }
         }
 
-        [RelayCommand]
-        public async Task EditAsync()
-        {
-            // Implement edit logic
-        }
+
 
         [RelayCommand]
         public async Task DeleteAsync()
         {
-            // Implement delete logic
+            try
+            {
+                _clientService.delete(SelectedListItem.ServiceID,_user.id); 
+                LoadItem(SelectedDate);
+                   
+            }
+            catch (Exception e )
+            {
+                Error = e.Message;
+            }
+            
         }
+
+
+
+        
     }
 }

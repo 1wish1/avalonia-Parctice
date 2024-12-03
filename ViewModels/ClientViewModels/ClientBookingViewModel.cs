@@ -133,8 +133,6 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             return;
         }
         try{
-
-        
             ClientAppointment clientAppointment = new ClientAppointment(){
                 Userid = _user.id,
                 ServiceID = SelectedListItem.ServiceId,
@@ -145,7 +143,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             _ClientService.insert(clientAppointment);
         }
         catch(Exception e){
-            Error = "Pls add your input";
+            Error = e.Message;
         }
     }
 

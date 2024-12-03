@@ -12,9 +12,12 @@ namespace AppoinmentScheduler.Services
         void insert(ClientAppointment clientService);
         Collection<ClientAppointment> Selectall(int user_id);
         Task<List<BusinessService>> SearchItemsAsync(string searchText);
-        Task<List<ClientAppointment>> SearchBydateAsync(string searchText);
+        List<ClientAppointment> SearchBydateAsync(string searchText,int userId);
         public Task<List<BusinessService>> GetItemsAsync(int page, int pageSize);
         void update();
-        void delete();
+        void delete(int ServiceID ,int UserID);
+
+        Collection<BusinessSubcriber> SelectallBS(int user_id);
+        List<BusinessSubcriber> SearchByDateBusinessSubcriber(string searchText,int userId);
     }
 }

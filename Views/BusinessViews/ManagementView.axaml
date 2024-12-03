@@ -15,21 +15,29 @@
                 <!-- Welcome Section -->
                 <StackPanel Margin="20">
                     <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold" TextAlignment="Center"/>
-                    <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold" TextAlignment="Center"/>
+                   
                     <!-- Add more UI elements as needed -->
-                    <StackPanel Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Calendar x:Name="calendar" SelectionMode="MultipleRange"/>
-                            <TextBlock Margin="20" 
-                                Text="{Binding #calendar.SelectedDate}"/>
+        <StackPanel Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Calendar x:Name="calendar"
+                    SelectionMode="SingleDate"
+                    SelectedDate="{Binding SelectedDate, Mode=TwoWay}" />
+            <TextBlock Margin="20" 
+                    Text="{Binding SelectedDate, StringFormat='Selected Date: {0:MM/dd/yyyy}'}" />
+            <StackPanel HorizontalAlignment="Center" >
+                <Button Content="Accept"> </Button>
+                <Button Content="Denied"> </Button>
+            </StackPanel> 
+        </StackPanel>
+        <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="5">
+                        <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
+                        <TextBlock Text="{Binding ClientEmail}" FontStyle="Italic" Foreground="Blue"/>                              
                     </StackPanel>
-                    <Border HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Black" BorderThickness="2">
-                        <WrapPanel Background="LightBlue" Width="200" Height="100">
-                            <Button Width="200">Button 1</Button>
-                            <Button>Button 2</Button>
-                            <Button>Button 3</Button>
-                            <Button>Button 4</Button>
-                        </WrapPanel>
-                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
                 </StackPanel>
                 
 
