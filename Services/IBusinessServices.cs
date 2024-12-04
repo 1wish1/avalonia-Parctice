@@ -7,6 +7,6 @@ namespace AppoinmentScheduler.Services
         void addBusinessService(BusinessAppointment businessAppointment);
         void updatedBusinessService(BusinessAppointment businessAppointment);
 
-        BusinessAppointment Select();
+        BusinessAppointment Select(int id);
     }
 }

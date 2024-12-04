@@ -15,8 +15,8 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 {
     [ObservableProperty] private string? _username;
     [ObservableProperty] private User? _user;
-    [ObservableProperty] private ObservableCollection<ClientAppointment> _items = new();
-    [ObservableProperty] private ClientAppointment? _selectedListItem;
+    [ObservableProperty] private ObservableCollection<ClientSubscribed> _items = new();
+    [ObservableProperty] private ClientSubscribed? _selectedListItem;
 
     private readonly IClientService _clientService;
 
@@ -31,17 +31,17 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
         {
             _user = message.Value;
             _username = _user?.email;
-            Items = new ObservableCollection<ClientAppointment>(_clientService.Selectall(_user.id));
+            Items = new ObservableCollection<ClientSubscribed>(_clientService.Selectall(_user.id));
              Count = CountItemsForToday();
             Total = Items.Count;
         });
-        Items = new ObservableCollection<ClientAppointment>();
+        Items = new ObservableCollection<ClientSubscribed>();
     }
-        public int CountItemsForToday()
-        {
-            DateTime today = DateTime.Today;
-            int Count = Items.Count(item => item.Time_Date == today.ToString("yyyy-MM-dd"));
-            return Count;
-        }
+    public int CountItemsForToday()
+    {
+        DateTime today = DateTime.Today;
+        int Count = Items.Count(item => item.CA_Time_Date == today.ToString("yyyy-MM-dd"));
+        return Count;
+    }
 }
 }

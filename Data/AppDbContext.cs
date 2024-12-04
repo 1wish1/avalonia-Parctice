@@ -12,8 +12,9 @@ namespace Data
         public DbSet<BusinessService> BusinessService { get; set; }
         public DbSet<ClientAppointment> ClientAppointment { get; set; }
         public DbSet<BusinessSubcriber> BusinessSubcriber { get; set; }
+        public DbSet<ClientSubscribed> ClientSubscribed { get; set; }
 
-        
+        public DbSet<BusinessAppointmentService> BusinessAppointmentService { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)   
         {
@@ -34,6 +35,12 @@ namespace Data
                 .HasKey(c => c.ClientAppointment_ID);
 
              modelBuilder.Entity<BusinessSubcriber>()
+                .HasNoKey();
+
+            modelBuilder.Entity<ClientSubscribed>()
+                .HasNoKey();
+
+            modelBuilder.Entity<BusinessAppointmentService>()
                 .HasNoKey();
             
 

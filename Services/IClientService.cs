@@ -10,10 +10,10 @@ namespace AppoinmentScheduler.Services
     public interface IClientService
     {
         void insert(ClientAppointment clientService);
-        Collection<ClientAppointment> Selectall(int user_id);
-        Task<List<BusinessService>> SearchItemsAsync(string searchText);
-        List<ClientAppointment> SearchBydateAsync(string searchText,int userId);
-        public Task<List<BusinessService>> GetItemsAsync(int page, int pageSize);
+        Collection<ClientSubscribed> Selectall(int user_id);
+        Task<List<BusinessAppointmentService>> SearchItemsAsync(string searchText);
+        List<ClientSubscribed> SearchBydateAsync(string searchText,int userId);
+        public Task<List<BusinessAppointmentService>> GetItemsAsync(int page, int pageSize);
         void update();
         void delete(int ServiceID ,int UserID);
 

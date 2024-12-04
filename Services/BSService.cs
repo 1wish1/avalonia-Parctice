@@ -28,9 +28,9 @@ namespace AppoinmentScheduler.Services
             _businessServices = BusinessService;
         }
 
-        public BusinessService addService(BusinessService businessService)
+        public BusinessService addService(BusinessService businessService, int id)
         {       
-                businessAppointment = _businessServices.Select();
+                businessAppointment = _businessServices.Select(id);
                 businessService.businessAppointment = businessAppointment;
 
                 _context.BusinessService.Add(businessService);

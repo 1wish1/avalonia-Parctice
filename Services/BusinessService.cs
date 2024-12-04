@@ -59,11 +59,11 @@ namespace AppoinmentScheduler.Services
             _context.SaveChanges();
         }
 
-        public BusinessAppointment Select()
+        public BusinessAppointment Select(int id)
         {   
             try
             {
-                BusinessAppointment businessAppointment = _context.BusinessAppointment.FromSqlRaw(@"SELECT * FROM BusinessAppointment WHERE Business_Account = {0} ", _user.id).FirstOrDefault();
+                BusinessAppointment businessAppointment = _context.BusinessAppointment.FromSqlRaw(@"SELECT * FROM BusinessAppointment WHERE Business_Account = {0} ", id).FirstOrDefault();
                 return businessAppointment;
             }
             catch (System.Exception)

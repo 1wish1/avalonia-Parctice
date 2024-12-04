@@ -15,34 +15,18 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
         [ObservableProperty] private string? _greeting = "ManagementViewModel";
 
         private readonly IBusinessServices _businessServices;
-        public ProfileViewModel(IBusinessServices BusinessService)
+        [ObservableProperty] private User? _user;
+        public ProfileViewModel(IBusinessServices BusinessService,IMessenger messenger)
         {
             _businessServices = BusinessService;
-            try
+             messenger.Register<ProfileViewModel, UserMessage>(this, (recipient, message) =>
             {
-                BusinessAppointment businessAppointment = _businessServices.Select();
-                Business_Name = businessAppointment.Business_name;
-                Address = businessAppointment.Address;
-                Contact_Information = businessAppointment.contact_information;
-                Organization_Office = businessAppointment.Organization_Office;
-                Business_Description = businessAppointment.Description;
-                Weekly_Schedule = businessAppointment.Schdule;
-                Time_Slots = businessAppointment.Time_Slots;
-                Max_appointment = businessAppointment.Max_appointment;
-                Cancellation_Policy = businessAppointment.Cancellation_Policy;
-            }
-            catch (Exception e)
-            {
-                Business_Name = "";
-                Address = "";
-                Contact_Information = "";
-                Organization_Office = "";
-                Business_Description = "";
-                Weekly_Schedule = "";
-                Time_Slots = "";
-                Max_appointment = null;
-                Cancellation_Policy = "";
-            }
+                Error = string.Empty;
+                _user = message.Value;
+                Select(_user.id);
+
+            }); 
+            
             
 
 
@@ -134,6 +118,34 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
                 return false;
             }
             return true;
+        }
+
+        private void Select(int userID){
+            try
+            {
+                BusinessAppointment businessAppointment = _businessServices.Select(userID);
+                Business_Name = businessAppointment.Business_name;
+                Address = businessAppointment.Address;
+                Contact_Information = businessAppointment.contact_information;
+                Organization_Office = businessAppointment.Organization_Office;
+                Business_Description = businessAppointment.Description;
+                Weekly_Schedule = businessAppointment.Schdule;
+                Time_Slots = businessAppointment.Time_Slots;
+                Max_appointment = businessAppointment.Max_appointment;
+                Cancellation_Policy = businessAppointment.Cancellation_Policy;
+            }
+            catch (Exception e)
+            {
+                Business_Name = "";
+                Address = "";
+                Contact_Information = "";
+                Organization_Office = "";
+                Business_Description = "";
+                Weekly_Schedule = "";
+                Time_Slots = "";
+                Max_appointment = null;
+                Cancellation_Policy = "";
+            }
         }
 
     }

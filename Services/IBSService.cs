@@ -8,7 +8,7 @@ namespace AppoinmentScheduler.Services
 {
     public interface IBSService
     {
-        BusinessService addService(BusinessService businessService);
+        BusinessService addService(BusinessService businessService, int id);
         void deleteService(int id);
         
         public void updateService(BusinessService businessService);

@@ -37,8 +37,8 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="Blue"/>
-                        <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/>
+                        <TextBlock Text="{Binding BS_Name}" FontWeight="Bold" Foreground="Blue"/>
+                        <TextBlock Text="{Binding BS_Description}" FontStyle="Italic" Foreground="Blue"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

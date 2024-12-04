@@ -57,51 +57,139 @@ namespace AppoinmentScheduler.Services
         {
             
         }
-        public Collection<ClientAppointment> Selectall(int user_id)
+        public Collection<ClientSubscribed> Selectall(int user_id)
         {   
             try
             {
-                var services = _context.ClientAppointment
-                .FromSqlRaw(@"SELECT * from ClientAppointment WHERE Userid = {0};",user_id)
+                var services = _context.ClientSubscribed
+                .FromSqlRaw(@"SELECT 
+                CA.[Description] as CA_Description,
+                CA.[status] as CA_Status,
+                CA.Time_Date as CA_Time_date,
+                BS.ServiceId as BS_ServiceID,
+                BS.Name as BS_Name,
+                BS.[Description] as BS_Description,
+                BS.Price as BS_Price,
+                BS.Availability as BS_Availability,
+                BS.Duration as BS_Duration,
+                BA.Address as BA_Address,
+                BA.Business_name as BA_name,
+                BA.Cancellation_Policy as BA_Cancellation_Policy,
+                BA.contact_information as BA_Contact_information,
+                BA.[Description] as BA_Description,
+                BA.Organization_Office as BS_Organization_Office,
+                BA.Time_Slots as BA_Time_Slots,
+                BA.Schdule as BA_Schedule,
+                BA.Max_appointment as BA_Max_appointment
+                from 
+                ClientAppointment as CA
+                JOIN BusinessService as BS on CA.ServiceID = BS.ServiceID
+                JOIN BusinessAppointment as BA on BS.BusinessAppointmentID = BA.BusinessAppointment_ID
+                WHERE CA.Userid  = {0};",user_id)
                 .ToList();
                 
                 if (services == null){
-                    return new Collection<ClientAppointment>();
+                    return new Collection<ClientSubscribed>();
                 }else{
-                    return new Collection<ClientAppointment>(services);
+                    return new Collection<ClientSubscribed>(services);
                 }    
             }
             catch (Exception e)
             {
-                return new Collection<ClientAppointment>();
+                return new Collection<ClientSubscribed>();
             }
             
             
         }
-        public async Task<List<BusinessService>> SearchItemsAsync(string searchText)
+        public async Task<List<BusinessAppointmentService>> SearchItemsAsync(string searchText)
         {
-            var services = await _context.BusinessService
-                .Where(bs => bs.Name.Contains(searchText))
-                .ToListAsync();
+            var services = await _context.BusinessAppointmentService
+            .FromSqlRaw(
+                @"SELECT 
+                BS.ServiceId as ServiceId,
+                BS.Name as BS_Name,
+                BS.Description as  BS_Description,
+                BS.Price as BS_Price,
+                BS.Availability as BS_Availability,
+                BS.Duration as  BS_Duration ,
+
+                BA.Business_name as BA_Business_name,
+                BA.Address as BA_Address,
+                BA.contact_information as BA_contact_information,
+                BA.Organization_Office as  BA_Organization_Office,
+                BA.Description as BA_Description,
+                BA.Schdule as  BA_Schedule ,
+                BA.Time_Slots as BA_Time_Slots ,
+                BA.Max_appointment as BA_Max_appointment,
+                BA.Cancellation_Policy as BA_Cancellation_Policy
+            from
+            BusinessService as BS
+            JOIN BusinessAppointment as BA on BS.BusinessAppointmentID = BA.BusinessAppointment_ID
+            WHERE Name LIKE '%' + {0} + '%';",
+                searchText)
+            .ToListAsync();
 
             return services;
         }
-         public async Task<List<BusinessService>> GetItemsAsync(int page, int pageSize)
-        {
-           //  Fetch items from the database with pagination
-            var items = await _context.BusinessService
-                .OrderBy(b => b.ServiceId)  // Order by a relevant field, e.g., ServiceId
-                .Skip(page * pageSize)      // Skip the number of items based on the page
-                .Take(pageSize)             // Take the page size amount of items
-                .ToListAsync();             // Execute the query and convert it to a list
 
+        // home Client
+         public async Task<List<BusinessAppointmentService>> GetItemsAsync(int page, int pageSize)
+        {
+           var items = await _context.BusinessAppointmentService.FromSqlRaw(
+                        @"SELECT 
+            BS.ServiceId as ServiceId,
+            BS.Name as BS_Name,
+            BS.Description as  BS_Description,
+            BS.Price as BS_Price,
+            BS.Availability as BS_Availability,
+            BS.Duration as  BS_Duration ,
+
+            BA.Business_name as BA_Business_name,
+            BA.Address as BA_Address,
+            BA.contact_information as BA_contact_information,
+            BA.Organization_Office as  BA_Organization_Office,
+            BA.Description as BA_Description,
+            BA.Schdule as  BA_Schedule ,
+            BA.Time_Slots as BA_Time_Slots ,
+            BA.Max_appointment as BA_Max_appointment,
+            BA.Cancellation_Policy as BA_Cancellation_Policy
+            from
+            BusinessService as BS
+            JOIN BusinessAppointment as BA on BS.BusinessAppointmentID = BA.BusinessAppointment_ID
+            ORDER BY ServiceId
+            OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY",
+                        page * pageSize, pageSize)
+                        .ToListAsync();
             return items;
         }
-        public  List<ClientAppointment> SearchBydateAsync(string searchText,int userId)
+        public  List<ClientSubscribed> SearchBydateAsync(string date,int userId)
         {
-           
-             List<ClientAppointment>? services = _context.ClientAppointment
-                .FromSqlRaw("SELECT * FROM ClientAppointment WHERE Time_Date = {0} AND Userid = {1};", searchText,userId)
+           var query = @"SELECT 
+                CA.[Description] as CA_Description,
+                CA.[status] as CA_Status,
+                CA.Time_Date as CA_Time_date,
+                BS.ServiceId as BS_ServiceID,
+                BS.Name as BS_Name,
+                BS.[Description] as BS_Description,
+                BS.Price as BS_Price,
+                BS.Availability as BS_Availability,
+                BS.Duration as BS_Duration,
+                BA.Address as BA_Address,
+                BA.Business_name as BA_name,
+                BA.Cancellation_Policy as BA_Cancellation_Policy,
+                BA.contact_information as BA_Contact_information,
+                BA.[Description] as BA_Description,
+                BA.Organization_Office as BS_Organization_Office,
+                BA.Time_Slots as BA_Time_Slots,
+                BA.Schdule as BA_Schedule,
+                BA.Max_appointment as BA_Max_appointment
+                from 
+                ClientAppointment as CA
+                JOIN BusinessService as BS on CA.ServiceID = BS.ServiceID
+                JOIN BusinessAppointment as BA on BS.BusinessAppointmentID = BA.BusinessAppointment_ID
+                WHERE CA.Time_Date = {0} AND CA.Userid = {1};";
+             List<ClientSubscribed>? services = _context.ClientSubscribed
+                .FromSqlRaw(query, date,userId)
                 .ToList();
             return services;
         }
@@ -111,25 +199,25 @@ namespace AppoinmentScheduler.Services
             try
             {
                 var query = @"
-                            SELECT 
-                                ca.Time_Date AS TimeDate,
-                                ca.Description,
-                                ca.status AS Status,
-                                ca.ServiceID AS ServiceID,
-                                ca.Userid  AS ClientID, 
-                                ca_acc.email AS ClientEmail,
-                                ca_acc.user_name AS ClientUserName,
-                                bs.name AS BusinessServiceName,
-                                bs.Description AS BusinessServiceDescription,
-                                bs.Price,
-                                bs.Duration,
-                                bs.Availability
-                            FROM ClientAppointment ca
-                            JOIN BusinessService bs ON ca.ServiceID = bs.ServiceID
-                            JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
-                            JOIN users ba_acc ON ba.Business_Account = ba_acc.id
-                            JOIN users ca_acc ON ca_acc.id = ca.Userid
-                            WHERE ba_acc.id = {0} and ca.status != 'Denied' and ca.status != 'Done' ";
+                SELECT 
+            ca.Time_Date AS TimeDate,
+            ca.Description,
+            ca.status AS Status,
+            ca.ServiceID AS ServiceID,
+            ca.Userid  AS ClientID, 
+            ca_acc.email AS ClientEmail,
+            ca_acc.user_name AS ClientUserName,
+            bs.name AS BusinessServiceName,
+            bs.Description AS BusinessServiceDescription,
+            bs.Price,
+            bs.Duration,
+            bs.Availability
+            FROM ClientAppointment ca
+            JOIN BusinessService bs ON ca.ServiceID = bs.ServiceID
+            JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
+            JOIN users ba_acc ON ba.Business_Account = ba_acc.id
+            JOIN users ca_acc ON ca_acc.id = ca.Userid
+            WHERE ba_acc.id = {0} and ca.status != 'Denied' and ca.status != 'Done' ";
 
                 var appointments = _context.BusinessSubcriber
                     .FromSqlRaw(query, user_id)
@@ -150,27 +238,26 @@ namespace AppoinmentScheduler.Services
         public List<BusinessSubcriber> SearchByDateBusinessSubcriber(string searchText, int userId)
         {
             var query = @"
-                            SELECT 
-                                ca.Time_Date AS TimeDate,
-                                ca.Description,
-                                ca.status AS Status,
-                                ca_acc.email AS ClientEmail,
-                                ca_acc.user_name AS ClientUserName,
-                                ca.ServiceID AS ServiceID,
-                                ca.Userid  AS ClientID, 
-                                bs.name AS BusinessServiceName,
-                                bs.Description AS BusinessServiceDescription,
-                                bs.Price,
-                                bs.Duration,
-                                bs.Availability
-                            FROM ClientAppointment ca
-                            JOIN BusinessService bs ON ca.ServiceID = bs.ServiceID
-                            JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
-                            JOIN users ba_acc ON ba.Business_Account = ba_acc.id
-                            JOIN users ca_acc ON ca_acc.id = ca.Userid
-                            WHERE ba_acc.id = {0} and ca.Time_Date = {1} and ca.status != 'Denied' and ca.status != 'Done' ;
+            SELECT 
+                ca.Time_Date AS TimeDate,
+                ca.Description,
+                ca.status AS Status,
+                ca_acc.email AS ClientEmail,
+                ca_acc.user_name AS ClientUserName,
+                ca.ServiceID AS ServiceID,
+                ca.Userid  AS ClientID, 
+                bs.name AS BusinessServiceName,
+                bs.Description AS BusinessServiceDescription,
+                bs.Price,
+                bs.Duration,
+                bs.Availability
+            FROM ClientAppointment ca
+            JOIN BusinessService bs ON ca.ServiceID = bs.ServiceID
+            JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
+            JOIN users ba_acc ON ba.Business_Account = ba_acc.id
+            JOIN users ca_acc ON ca_acc.id = ca.Userid
+            WHERE ba_acc.id = {0} and ca.Time_Date = {1} and ca.status != 'Denied' and ca.status != 'Done' ;";
 
-";
             var appointments = _context.BusinessSubcriber
                     .FromSqlRaw(query, userId,searchText)
                     .ToList();

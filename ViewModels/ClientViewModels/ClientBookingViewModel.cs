@@ -15,10 +15,10 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
     public partial class ClientBookingViewModel : ViewModelBase
     {
 
-    [ObservableProperty] private ObservableCollection<BusinessService> _items;
+    [ObservableProperty] private ObservableCollection<BusinessAppointmentService> _items;
     [ObservableProperty] private bool _isLoading;
 
-    [ObservableProperty] private BusinessService? _selectedListItem;
+    [ObservableProperty] private BusinessAppointmentService? _selectedListItem;
 
    [ObservableProperty] private DateTime _selectedDate;
    
@@ -42,7 +42,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             SearchAsync();
         });
         
-        Items = new ObservableCollection<BusinessService>();
+        Items = new ObservableCollection<BusinessAppointmentService>();
         _ClientService = clientService;
         SelectedDate = DateTime.Today;
     }
@@ -118,13 +118,6 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
        return true;
     }
-
-
-
-
-
-
-
 
     [RelayCommand]  public async Task AddAsync(){
         if (!CanAdd()){

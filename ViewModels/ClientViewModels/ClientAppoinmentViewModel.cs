@@ -14,9 +14,9 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
     {
         [ObservableProperty] private User? _user;
 
-        [ObservableProperty] private ObservableCollection<ClientAppointment> _items = new();
+        [ObservableProperty] private ObservableCollection<ClientSubscribed> _items = new();
 
-        [ObservableProperty] private ClientAppointment? _selectedListItem;
+        [ObservableProperty] private ClientSubscribed? _selectedListItem;
 
         [ObservableProperty] private DateTime? _selectedDate;
         [ObservableProperty] private string? _error;
@@ -62,7 +62,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
             try
             {
-                _clientService.delete(SelectedListItem.ServiceID,_user.id); 
+                _clientService.delete(SelectedListItem.BS_ServiceID,_user.id); 
                 LoadItem(SelectedDate);
                 Error = "Done Delition"; 
             }

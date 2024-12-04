@@ -82,7 +82,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
                 Duration = (int)Duration,
                 Availability = (int)Availability
                 };
-                Items.Add(_BSService.addService(businessService));
+                Items.Add(_BSService.addService(businessService,_user.id));
             }
             catch (Exception e)
             {

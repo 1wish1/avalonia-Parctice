@@ -173,10 +173,8 @@ namespace AppoinmentScheduler.ViewModels
         public ListItemTemplate(Type type, string iconKey)
         {
             ModelType = type;
-            Label = type.Name.Replace("PageViewModel", "");
-            Label = type.Name.Replace("ViewModel", "");
-            Label = type.Name.Replace("Client", "");
-            Label = type.Name.Replace("Business", "");
+            Label = type.Name.Replace("PageViewModel", "").Replace("ViewModel", "").Replace("Business", "").Replace("Client", "");
+
             App.Current!.TryFindResource(iconKey, out var res);
             ListItemIcon = (StreamGeometry)res!;
         }
