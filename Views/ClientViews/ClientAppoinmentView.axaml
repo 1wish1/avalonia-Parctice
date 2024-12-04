@@ -26,7 +26,9 @@
         <DataTemplate>
             <StackPanel Margin="5">
                 <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
-                <TextBlock Text="{Binding ServiceID}" FontStyle="Italic" Foreground="Blue"/>                              
+                
+                
+                   
             </StackPanel>
         </DataTemplate>
     </ListBox.ItemTemplate>

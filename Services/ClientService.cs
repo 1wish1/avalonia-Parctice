@@ -44,7 +44,7 @@ namespace AppoinmentScheduler.Services
                 VALUES ({0}, {1}, {2}, {3}, {4})",
                 clientAppointment.Userid,
                 clientAppointment.ServiceID,
-                clientAppointment.Time_Date.ToString("yyyy-MM-dd HH:mm:ss.fff"),
+                clientAppointment.Time_Date,
                 clientAppointment.Status,
                 clientAppointment.Description
             );
@@ -73,7 +73,6 @@ namespace AppoinmentScheduler.Services
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
                 return new Collection<ClientAppointment>();
             }
             
@@ -81,7 +80,6 @@ namespace AppoinmentScheduler.Services
         }
         public async Task<List<BusinessService>> SearchItemsAsync(string searchText)
         {
-            // Query the database using EF Core with a LINQ query
             var services = await _context.BusinessService
                 .Where(bs => bs.Name.Contains(searchText))
                 .ToListAsync();
@@ -90,7 +88,7 @@ namespace AppoinmentScheduler.Services
         }
          public async Task<List<BusinessService>> GetItemsAsync(int page, int pageSize)
         {
-            // Fetch items from the database with pagination
+           //  Fetch items from the database with pagination
             var items = await _context.BusinessService
                 .OrderBy(b => b.ServiceId)  // Order by a relevant field, e.g., ServiceId
                 .Skip(page * pageSize)      // Skip the number of items based on the page
@@ -101,7 +99,7 @@ namespace AppoinmentScheduler.Services
         }
         public  List<ClientAppointment> SearchBydateAsync(string searchText,int userId)
         {
-            // Query the database using EF Core with a LINQ query
+           
              List<ClientAppointment>? services = _context.ClientAppointment
                 .FromSqlRaw("SELECT * FROM ClientAppointment WHERE Time_Date = {0} AND Userid = {1};", searchText,userId)
                 .ToList();
@@ -117,6 +115,8 @@ namespace AppoinmentScheduler.Services
                                 ca.Time_Date AS TimeDate,
                                 ca.Description,
                                 ca.status AS Status,
+                                ca.ServiceID AS ServiceID,
+                                ca.Userid  AS ClientID, 
                                 ca_acc.email AS ClientEmail,
                                 ca_acc.user_name AS ClientUserName,
                                 bs.name AS BusinessServiceName,
@@ -129,10 +129,10 @@ namespace AppoinmentScheduler.Services
                             JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
                             JOIN users ba_acc ON ba.Business_Account = ba_acc.id
                             JOIN users ca_acc ON ca_acc.id = ca.Userid
-                            WHERE ba_acc.id = {0} and ca.status != 'Denied' ";
+                            WHERE ba_acc.id = {0} and ca.status != 'Denied' and ca.status != 'Done' ";
 
                 var appointments = _context.BusinessSubcriber
-                    .FromSqlRaw(query, 18012)
+                    .FromSqlRaw(query, user_id)
                     .ToList();
                 if (appointments == null){
                     return new Collection<BusinessSubcriber>();
@@ -156,6 +156,8 @@ namespace AppoinmentScheduler.Services
                                 ca.status AS Status,
                                 ca_acc.email AS ClientEmail,
                                 ca_acc.user_name AS ClientUserName,
+                                ca.ServiceID AS ServiceID,
+                                ca.Userid  AS ClientID, 
                                 bs.name AS BusinessServiceName,
                                 bs.Description AS BusinessServiceDescription,
                                 bs.Price,
@@ -166,7 +168,7 @@ namespace AppoinmentScheduler.Services
                             JOIN BusinessAppointment ba ON bs.BusinessAppointmentID = ba.BusinessAppointment_ID
                             JOIN users ba_acc ON ba.Business_Account = ba_acc.id
                             JOIN users ca_acc ON ca_acc.id = ca.Userid
-                            WHERE ba_acc.id = {0} and ca.Time_Date = {1} and ca.status != 'Denied';
+                            WHERE ba_acc.id = {0} and ca.Time_Date = {1} and ca.status != 'Denied' and ca.status != 'Done' ;
 
 ";
             var appointments = _context.BusinessSubcriber
@@ -174,6 +176,37 @@ namespace AppoinmentScheduler.Services
                     .ToList();
             return appointments;
 
+        }
+        
+
+        public void Accept(int ClientID, int ServiceID)
+        {
+            string query = @"
+                        UPDATE ClientAppointment
+                        SET Status = 'Accept'
+                        WHERE ClientAppointment.Userid = {0} AND ClientAppointment.ServiceID = {1};";
+            _context.Database.ExecuteSqlRaw(query, ClientID,ServiceID);
+        
+        }
+
+        public void Denied(int ClientID, int ServiceID)
+        {
+
+            string query = @"
+                        UPDATE ClientAppointment
+                        SET Status = 'Denied'
+                        WHERE ClientAppointment.Userid = {0} AND ClientAppointment.ServiceID = {1};";
+            _context.Database.ExecuteSqlRaw(query, ClientID,ServiceID);
+        
+        }
+        public void Done(int ClientID, int ServiceID)
+        {
+            string query = @"
+                        UPDATE ClientAppointment
+                        SET Status = 'Done'
+                        WHERE ClientAppointment.Userid = {0} AND ClientAppointment.ServiceID = {1};";
+            _context.Database.ExecuteSqlRaw(query, ClientID,ServiceID);
+        
         }
     }
 }

@@ -10,25 +10,26 @@
     <StackPanel Margin="20">
         <TextBlock Text="Welcome to Business Home" FontSize="24" FontWeight="Bold"/>
        
-    <DockPanel HorizontalAlignment="Center" >
+    <DockPanel HorizontalAlignment="Center">
+    
         <Border Width="300" Height="150" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left" Margin="0,0,100,0">
-            <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Today's Apppointment" />
+                <TextBlock Text="{Binding Count}" Foreground="Black" />
+            </StackPanel>
         </Border>
         <Border Width="300" Height="150" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right" Margin="100,0,0,0">
-            <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Total Apppointment" />
+                <TextBlock Text="{Binding Total}" Foreground="Black" />
+            </StackPanel>
         </Border>
     </DockPanel>
     
-    <DockPanel>
-      <StackPanel DockPanel.Dock="Top">
-        <TextBox Text="Binding SearchText" Watermark="Search for Albums...." />
-         <!-- <ProgressBar IsIndeterminate="True" IsVisible="Binding IsBusy" /> -->
-      </StackPanel>
-    </DockPanel>
     <Canvas Background="AliceBlue">
         <!-- TextBlock for Dock = Top -->
         <TextBlock Foreground="Aqua" Canvas.Left="0" Canvas.Top="0">
-            number
+            Your Appoinment
         </TextBlock>
     </Canvas>
 <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
@@ -36,7 +37,7 @@
         <DataTemplate>
             <StackPanel Margin="5">
                 <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
-                <TextBlock Text="{Binding ClientEmail}" FontStyle="Italic" Foreground="Blue"/>                              
+                <TextBlock Text="{Binding TimeDate}" FontStyle="Italic" Foreground="Blue"/>                              
             </StackPanel>
         </DataTemplate>
     </ListBox.ItemTemplate>

@@ -19,5 +19,9 @@ namespace AppoinmentScheduler.Services
 
         Collection<BusinessSubcriber> SelectallBS(int user_id);
         List<BusinessSubcriber> SearchByDateBusinessSubcriber(string searchText,int userId);
+
+        void Accept(int ClientID , int ServiceID);
+        void Done(int ClientID , int ServiceID);
+        void Denied(int ClientID , int ServiceID);
     }
 }

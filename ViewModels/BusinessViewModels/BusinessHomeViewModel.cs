@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AppoinmentScheduler.ObjMessages;
 using AppoinmentScheduler.Services;
 
@@ -21,6 +22,9 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
         [ObservableProperty] private BusinessSubcriber? _selectedListItem;
 
         private readonly IClientService _clientService;
+
+        [ObservableProperty] private int _count;
+        [ObservableProperty] private int _total;
        
 
         public BusinessHomeViewModel(IMessenger messenger, IClientService clientService)
@@ -30,9 +34,17 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             {
                 _user = message.Value;
                 Items = new ObservableCollection<BusinessSubcriber>(_clientService.SelectallBS(_user.id));
+                Count = CountItemsForToday();
+                Total = Items.Count;
             });
             Items = new ObservableCollection<BusinessSubcriber>();
-             
+        }
+
+        public int CountItemsForToday()
+        {
+            DateTime today = DateTime.Today;
+            int Count = Items.Count(item => item.TimeDate == today.ToString("yyyy-MM-dd"));
+            return Count;
         }
         
         

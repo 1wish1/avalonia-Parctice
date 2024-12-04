@@ -38,6 +38,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
         messenger.Register<ClientBookingViewModel, UserMessage>(this, (recipient, message) =>
         {
             _user = message.Value;
+            Error = " ";
             SearchAsync();
         });
         
@@ -60,11 +61,8 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
         if (fetchedItems != null && fetchedItems.Any())
         {
-            // Item random 
             var random = new Random();
             fetchedItems = fetchedItems.OrderBy(x => random.Next()).ToList();
-
-            // Add item to the collection 
             foreach (var item in fetchedItems)
             {
                 Items.Add(item);
@@ -136,7 +134,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             ClientAppointment clientAppointment = new ClientAppointment(){
                 Userid = _user.id,
                 ServiceID = SelectedListItem.ServiceId,
-                Time_Date = SelectedDate,
+                Time_Date = SelectedDate.ToString("yyyy-MM-dd"),
                 Status = "pending",
                 Description = Description
             };

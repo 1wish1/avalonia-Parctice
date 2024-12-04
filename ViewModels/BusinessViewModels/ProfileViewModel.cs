@@ -16,11 +16,39 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
 
         private readonly IBusinessServices _businessServices;
         public ProfileViewModel(IBusinessServices BusinessService)
-        {   
+        {
             _businessServices = BusinessService;
+            try
+            {
+                BusinessAppointment businessAppointment = _businessServices.Select();
+                Business_Name = businessAppointment.Business_name;
+                Address = businessAppointment.Address;
+                Contact_Information = businessAppointment.contact_information;
+                Organization_Office = businessAppointment.Organization_Office;
+                Business_Description = businessAppointment.Description;
+                Weekly_Schedule = businessAppointment.Schdule;
+                Time_Slots = businessAppointment.Time_Slots;
+                Max_appointment = businessAppointment.Max_appointment;
+                Cancellation_Policy = businessAppointment.Cancellation_Policy;
+            }
+            catch (Exception e)
+            {
+                Business_Name = "";
+                Address = "";
+                Contact_Information = "";
+                Organization_Office = "";
+                Business_Description = "";
+                Weekly_Schedule = "";
+                Time_Slots = "";
+                Max_appointment = null;
+                Cancellation_Policy = "";
+            }
+            
+
+
         }
         [ObservableProperty] private string? _business_Name;
-         [ObservableProperty] private string? _address;
+        [ObservableProperty] private string? _address;
         [ObservableProperty] private string? _business_Description;
         [ObservableProperty] private string? _contact_Information;
         [ObservableProperty] private string? _weekly_Schedule;
@@ -29,9 +57,10 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
         [ObservableProperty] private string? _cancellation_Policy;
         [ObservableProperty] private string? _organization_Office;
         [ObservableProperty] private string? _error;
-        
 
-        [RelayCommand] private async Task OnsubmitAsync()
+
+        [RelayCommand]
+        private async Task OnsubmitAsync()
         {
             Error = string.Empty;
 
@@ -41,7 +70,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             }
             BusinessAppointment businessAppointment = new BusinessAppointment()
             {
-                Business_name = Business_Name, 
+                Business_name = Business_Name,
                 Address = Address,
                 contact_information = Contact_Information,
                 Organization_Office = Organization_Office,
@@ -50,7 +79,7 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
                 Time_Slots = Time_Slots,
                 Max_appointment = (int)Max_appointment,
                 Cancellation_Policy = Cancellation_Policy
-                
+
             };
 
             _businessServices.addBusinessService(businessAppointment);
@@ -60,49 +89,52 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
         {
             if (string.IsNullOrWhiteSpace(Business_Name) || Business_Name.Length < 3)
             {
-                Error = "Invalid Business Name" ;
+                Error = "Invalid Business Name";
                 return false;
             }
-            
+
             if (string.IsNullOrWhiteSpace(Address) || Address.Length < 3)
             {
-                Error = "Invalid Address Description" ;
+                Error = "Invalid Address Description";
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Organization_Office) || Organization_Office.Length < 3)
             {
-                Error = "Invalid Address Organition Office " ;
+                Error = "Invalid Address Organition Office ";
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Business_Description) || Business_Description.Length < 3)
             {
-                Error = "Invalid Business Description" ;
+                Error = "Invalid Business Description";
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Contact_Information) || Contact_Information.Length < 3)
             {
-                Error = "Invalid Contact Information" ;
+                Error = "Invalid Contact Information";
                 return false;
             }
             if (string.IsNullOrWhiteSpace(Weekly_Schedule) || Weekly_Schedule.Length < 3)
             {
-                Error = "Invalid Weekly Schedule" ;
+                Error = "Invalid Weekly Schedule";
                 return false;
-            }if (string.IsNullOrWhiteSpace(Time_Slots) || Time_Slots.Length < 3)
+            }
+            if (string.IsNullOrWhiteSpace(Time_Slots) || Time_Slots.Length < 3)
             {
-                Error = "Invalid Time Slots" ;
+                Error = "Invalid Time Slots";
                 return false;
-            }if (!Max_appointment.HasValue || Max_appointment.Value < 0)
+            }
+            if (!Max_appointment.HasValue || Max_appointment.Value < 0)
             {
-                Error = "Invalid Max Appointments" ;
+                Error = "Invalid Max Appointments";
                 return false;
-            }if (string.IsNullOrWhiteSpace(Cancellation_Policy) || Cancellation_Policy.Length < 3)
+            }
+            if (string.IsNullOrWhiteSpace(Cancellation_Policy) || Cancellation_Policy.Length < 3)
             {
-                Error = "Invalid Cancellation Policy" ;
+                Error = "Invalid Cancellation Policy";
                 return false;
             }
             return true;
         }
-        
+
     }
 }

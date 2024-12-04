@@ -2,6 +2,9 @@ namespace Models
 {
     public class BusinessSubcriber
     {
+
+        public required int ServiceID { get; set; } 
+         public required int ClientID { get; set; }
         public required string TimeDate { get; set; } 
         public required string Description { get; set; } 
         public required string Status  { get; set; } 

@@ -11,20 +11,28 @@
         <TextBlock Text="Welcome to Client Home" FontSize="24" FontWeight="Bold"/>
         <TextBlock Text="{Binding Username}" FontSize="24" FontWeight="Bold"/>
     
-    <DockPanel HorizontalAlignment="Center" >
+    <DockPanel HorizontalAlignment="Center">
+    
         <Border Width="300" Height="150" Background="SkyBlue" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left" Margin="0,0,100,0">
-            <TextBlock Foreground="Black">Dock = "Top"</TextBlock>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Today's Apppointment" />
+                <TextBlock Text="{Binding Count}" Foreground="Black" />
+            </StackPanel>
         </Border>
         <Border Width="300" Height="150" Background="LemonChiffon" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Right" Margin="100,0,0,0">
-            <TextBlock Foreground="Black">Dock = "Bottom"</TextBlock>
+            <StackPanel>
+                <TextBlock Foreground="Black" Text="Total Apppointment" />
+                <TextBlock Text="{Binding Total}" Foreground="Black" />
+            </StackPanel>
         </Border>
     </DockPanel>
+
 <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
     <ListBox.ItemTemplate>
         <DataTemplate>
             <StackPanel Margin="5">
                 <TextBlock Text="{Binding Description}" FontStyle="Italic" Foreground="Blue"/> 
-                <TextBlock Text="{Binding ServiceID}" FontStyle="Italic" Foreground="Blue"/>                              
+                
             </StackPanel>
         </DataTemplate>
     </ListBox.ItemTemplate>

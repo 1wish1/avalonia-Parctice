@@ -103,28 +103,6 @@ namespace AppoinmentScheduler.Services
             
             
         }
-        public Collection<ClientAppointment> Selectall(int user_id)
-        {   
-            try
-            {
-                var services = _context.ClientAppointment
-                .FromSqlRaw(@"SELECT * from ClientAppointment WHERE Client_Account = {0};",_user.id)
-                .ToList();
-                if (services == null){
-                    return new Collection<ClientAppointment>();
-                }else{
-                    return new Collection<ClientAppointment>(services);
-                }    
-            }
-            catch (Exception e)
-            {
-
-                return new Collection<ClientAppointment>();
-            }
-            
-            
-        }
-
 
         public BusinessService Select(int id)
         {

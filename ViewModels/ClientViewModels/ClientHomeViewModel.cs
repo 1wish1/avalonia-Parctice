@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AppoinmentScheduler.ObjMessages;
 using AppoinmentScheduler.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -19,6 +20,9 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
     private readonly IClientService _clientService;
 
+    [ObservableProperty] private int _count;
+    [ObservableProperty] private int _total;
+
     public ClientHomeViewModel(IMessenger messenger, IClientService clientService)
     {
         _clientService = clientService;
@@ -28,9 +32,16 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             _user = message.Value;
             _username = _user?.email;
             Items = new ObservableCollection<ClientAppointment>(_clientService.Selectall(_user.id));
-            
+             Count = CountItemsForToday();
+            Total = Items.Count;
         });
         Items = new ObservableCollection<ClientAppointment>();
     }
+        public int CountItemsForToday()
+        {
+            DateTime today = DateTime.Today;
+            int Count = Items.Count(item => item.Time_Date == today.ToString("yyyy-MM-dd"));
+            return Count;
+        }
 }
 }

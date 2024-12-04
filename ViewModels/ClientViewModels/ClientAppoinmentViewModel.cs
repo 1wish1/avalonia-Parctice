@@ -30,7 +30,7 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
             messenger.Register<ClientAppoinmentViewModel, UserMessage>(this, (recipient, message) =>
             {
                 _user = message.Value;
-                
+                Error = "";
             });
           
             
@@ -38,16 +38,20 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
 
         partial void OnSelectedDateChanged(DateTime? value)
         {
+            Error = "";
             LoadItem(value);
+            
         }
         public void LoadItem(DateTime? value){
-            var filteredItems = _clientService.SearchBydateAsync(value.Value.ToString("yyyy-MM-dd HH:mm:ss.fff"),_user.id);
+            var filteredItems = _clientService.SearchBydateAsync(value.Value.ToString("yyyy-MM-dd"),_user.id);
 
             Items.Clear();
             foreach (var item in filteredItems)
             {
+                
                 Items.Add(item);
             }
+            
         }
 
 
@@ -55,11 +59,12 @@ namespace AppoinmentScheduler.ViewModels.ClientViewModels
         [RelayCommand]
         public async Task DeleteAsync()
         {
+
             try
             {
                 _clientService.delete(SelectedListItem.ServiceID,_user.id); 
                 LoadItem(SelectedDate);
-                   
+                Error = "Done Delition"; 
             }
             catch (Exception e )
             {

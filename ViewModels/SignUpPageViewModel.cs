@@ -69,7 +69,7 @@ namespace AppoinmentScheduler.ViewModels
             
                 string validation = _userService.AddUser(user, oAuthToken);
                 if(validation == "done"){
-                    Console.WriteLine("asdasd");
+                    
                     _mainWindowViewModel.IsLoggedIn = true;
                     _mainWindowViewModel.SetView();
 

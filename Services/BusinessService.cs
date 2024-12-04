@@ -61,9 +61,21 @@ namespace AppoinmentScheduler.Services
 
         public BusinessAppointment Select()
         {   
-             BusinessAppointment? businessAppointment = _context.BusinessAppointment.FromSqlRaw(@"SELECT * FROM BusinessAppointment WHERE Business_Account = {0} ", _user.id).FirstOrDefault();
-             return businessAppointment;
+            try
+            {
+                BusinessAppointment businessAppointment = _context.BusinessAppointment.FromSqlRaw(@"SELECT * FROM BusinessAppointment WHERE Business_Account = {0} ", _user.id).FirstOrDefault();
+                return businessAppointment;
+            }
+            catch (System.Exception)
+            {
+                
+                throw;
+            }
+                
+            
+             
         }
+
     }
 
 

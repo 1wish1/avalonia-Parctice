@@ -103,7 +103,6 @@ namespace AppoinmentScheduler.ViewModels
             if (_user.role == 1) // Business user
             {
                 Items.Clear();
-                Console.WriteLine("Business");
                 Items.Add(new ListItemTemplate(typeof(BusinessHomeViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ManagementViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ProfileViewModel), "HomeRegular"));
@@ -122,7 +121,6 @@ namespace AppoinmentScheduler.ViewModels
             else if (_user.role == 0) // Client user
             {
                 Items.Clear();
-                Console.WriteLine("ClientHomeViewModel");
                 Items.Add(new ListItemTemplate(typeof(ClientHomeViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ClientAppoinmentViewModel), "HomeRegular"));
                 Items.Add(new ListItemTemplate(typeof(ClientBookingViewModel), "HomeRegular"));
@@ -177,6 +175,8 @@ namespace AppoinmentScheduler.ViewModels
             ModelType = type;
             Label = type.Name.Replace("PageViewModel", "");
             Label = type.Name.Replace("ViewModel", "");
+            Label = type.Name.Replace("Client", "");
+            Label = type.Name.Replace("Business", "");
             App.Current!.TryFindResource(iconKey, out var res);
             ListItemIcon = (StreamGeometry)res!;
         }

@@ -74,15 +74,21 @@ namespace AppoinmentScheduler.ViewModels.BusinessViewModels
             if (!ValidateInputs()){
                 return;
             }
-            BusinessService businessService = new BusinessService(){
+            try{
+                BusinessService businessService = new BusinessService(){
                 Name = Name,
                 Description = Description,
                 Price = (int)Price,
                 Duration = (int)Duration,
                 Availability = (int)Availability
-            };
+                };
+                Items.Add(_BSService.addService(businessService));
+            }
+            catch (Exception e)
+            {
+                Error = "You need to Set your profile";
+            }
             
-            Items.Add(_BSService.addService(businessService));
         }
 
 

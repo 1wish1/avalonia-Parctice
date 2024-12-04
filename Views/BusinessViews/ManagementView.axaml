@@ -24,9 +24,12 @@
             <TextBlock Margin="20" 
                     Text="{Binding SelectedDate, StringFormat='Selected Date: {0:MM/dd/yyyy}'}" />
             <StackPanel HorizontalAlignment="Center" >
-                <Button Content="Accept"> </Button>
-                <Button Content="Denied"> </Button>
-            </StackPanel> 
+                <Button Content="Accept" Command="{Binding AcceptCommand}" />
+                <Button Content="Delete" Command="{Binding DeniedCommand}" /> 
+                <Button Content="Done" Command="{Binding DoneCommand}" />
+                
+            </StackPanel>
+             <TextBlock Text="{Binding Error}" FontSize="16" Margin="0,10,0,0"/> 
         </StackPanel>
         <ListBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedListItem}" Margin="0,20,0,0" Height="400">
             <ListBox.ItemTemplate>
